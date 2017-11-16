@@ -1,0 +1,1953 @@
+<section id="the-unix-shell">
+  <h1>The Unix Shell</h1>
+  <p><highlight>Welcome to The Unix Shell tutorial.<highlight></p>
+  <p>At the end of this tutorial you will be able to move around in a shell, run software, write and run scripts.
+    <br>For questions or suggestions  feel free to <a href="mailto:jorge.boucas@age.mpg.de">contact</a> us.</p>
+    <br>
+    <br>
+  <p>
+  <small line-height="0.1">
+    <font size="3" line-height="0.1">
+      <u>References</u>:
+      <br>https://github.com/tracykteal/shell-genomics-edamame
+      <br>http://www.datacarpentry.org/lessons/#genomics-workshop
+      <br>https://software-carpentry.org/lessons/
+    </font>
+  </small>
+</p>
+  <aside class="notes" data-markdown>
+  This tutorial is followed by the "Help your self on a remote server" tutorial.
+  </aside>
+</section>
+
+<section id="outline">
+  <h1>Outline</h1>
+  <font size="6" align="left">
+  <div class="column">
+    <ul style="padding-left: 40px;">
+      <li>What is the shell?
+      <br><li>Geeks and repetitive tasks
+      <br><li>Resources
+      <br><li>How to access the sell
+      <br><li>Starting with the shell
+      <br><li>Arguments
+      <br><li>The Unix directory file structure
+      <br><li>Examining the contents of other directories
+      <br><li>Shortcut: Tab Completion
+      <br><li>Full vs. Relative Paths
+      <br><li>Symbolic links
+      <br><li>Saving time with wild cards
+    </ul>
+  </div>
+  <div class="column">
+    <ul style="padding-left: 100px;">
+      <li>Command history
+      <br><li>Examining files
+      <br><li>Searching files
+      <br><li>Redirection
+      <br><li>Creating, moving, copying, and removing
+      <br><li>Writing files
+      <br><li>Running programs
+      <br><li>Running scripts
+      <br><li>Permissions
+      <br><li>Loops
+      <br><li>Logical statements
+      <br><li>Shell files
+      <br><li>Others
+    </ul>
+  </div>
+  </font>
+</section>
+
+<section id="theshell">
+  <h1>What is the shell?</h1>
+  <font size="6" align="left">
+    <ul>The shell is a program that presents a command line interface which allows
+      you <b>to control your computer using commands entered with a keyboard</b> instead
+      of controlling graphical user interfaces (GUIs) with a mouse/keyboard combination.
+      <br><br>There are many reasons to learn about the shell.
+    </ul>
+    <ul style="padding-left: 40px;">
+      <br><li><b>For most bioinformatics tools, you have to use the shell.</b> There is no graphical
+      interface. If you want to work in metagenomics or genomics you're going to
+      need to use the shell.
+      <br><br><li>The shell gives you power. The command line gives you the <b>power to do your
+      work more efficiently and more quickly</b>.  When you need to do things tens to
+       hundreds of times, knowing how to use the shell is transformative.
+      <br><br><li><b>To use remote computers or cloud computing, you need to use the shell.</b>
+    </ul>
+  </font>
+</section>
+
+<section id="geeks">
+  <h1>Geeks and repetitive tasks</h1>
+    <div>
+        <img src="modules/the-unix-shell/geeks.png" align="center">
+    </div>
+</section>
+
+<section id="resources">
+  <h1>Resources</h1>
+  <font size="5" align="left">
+    <ul>
+    <b>Shell cheat sheets</b>:
+  	<br><a href="http://fosswire.com/post/2007/08/unixlinux-command-cheat-sheet/"
+      >&nbsp;&nbsp;&nbsp;&nbsp http://fosswire.com/post/2007/08/unixlinux-command-cheat-sheet/</a>
+  	<br><a href="https://files.fosswire.com/2007/08/fwunixref.pdf"
+      >&nbsp;&nbsp;&nbsp;&nbsp https://files.fosswire.com/2007/08/fwunixref.pdf</a>
+  	<br><a href="https://github.com/swcarpentry/boot-camps/blob/master/shell/shell_cheatsheet.md"
+      >&nbsp;&nbsp;&nbsp;&nbsp https://github.com/swcarpentry/boot-camps/blob/master/shell/shell_cheatsheet.md</a>
+    <br>
+    <br><b>Explain shell - a web site where you can see what the different components of a shell command are doing:</b>
+  	<br>&nbsp;&nbsp;&nbsp;&nbsp <a href="http://explainshell.com">http://explainshell.com</a>
+  	<br>&nbsp;&nbsp;&nbsp;&nbsp <a href="http://www.commandlinefu.com">http://www.commandlinefu.com</a>
+    <br>
+    <br><b>Carpentry:</b>
+  	<br>&nbsp;&nbsp;&nbsp;&nbsp <a href="https://software-carpentry.org/lessons/">https://software-carpentry.org/lessons/</a>
+  	<br>&nbsp;&nbsp;&nbsp;&nbsp <a href="http://www.datacarpentry.org/lessons/#genomics-workshop">http://www.datacarpentry.org/lessons/#genomics-workshop</a>
+    <br>
+    <br><b>Tutorials:</b>
+  	<br>&nbsp;&nbsp;&nbsp;&nbsp <a href="http://tldp.org/LDP/Bash-Beginners-Guide/html/index.html">http://tldp.org/LDP/Bash-Beginners-Guide/html/index.html</a>
+  	<br>&nbsp;&nbsp;&nbsp;&nbsp <a href="http://guide.bash.academy">http://guide.bash.academy</a>
+    <br>
+    <br><b>Interactive learning:</b>
+  	<br>&nbsp;&nbsp;&nbsp;&nbsp <a href="https://www.codecademy.com/learn/learn-the-command-line">https://www.codecademy.com/learn/learn-the-command-line</a>
+  </ul>
+  </font>
+</section>
+
+<section id="access">
+  <h1>How to access the shell</h1>
+  <ul>
+    The shell is already available on Mac and Linux.<br>
+    For Windows, you'll have to download a separate program.<br>
+    <br>
+    <b><u>Mac</u></b><br>
+    On Mac the shell is available through Terminal<br>
+    Applications -> Utilities -> Terminal<br>
+    Go ahead and drag the Terminal application to your Dock for easy access.<br>
+    <br>
+    <b><u>Windows</u></b><br>
+    For Windows, we're going to be using gitbash.<br>
+    Download and install <a href="http://msysgit.github.io">http://msysgit.github.io</a> on your computer.<br>
+    Open up the program.<br>
+  <ul>
+</section>
+
+<section id="starting">
+  <h1>Starting with the shell</h1>
+  <font size=6>
+    <ul>Enter the following commands:
+      <pre><code data-trim>
+        git clone https://github.com/mpg-age-bioinformatics/shell-genomics-edamame.git
+      </code></pre>
+      This command will grab all of the data needed for this workshop from the internet.
+      (We're not going to talk about git right now, but it's a tool for doing version control.)
+      <pre><code data-trim>
+        cd shell-genomics-edamame
+      </code></pre>
+      `cd` stands for 'change directory'
+      <pre><code data-trim>
+        ls
+      </code></pre>
+      `ls` stands for 'list' and it lists the contents of a directory
+    </ul>
+  </font>
+</section>
+
+<section id="starting2">
+  <h1>Starting with the shell</h1>
+  <font size=6>
+    <ul>
+      <pre><code data-trim>
+        cd edamame-data
+        ls -F
+      </code></pre>
+      Anything with a "/" after it is a directory.
+      <br>Things with a "*" after them are programs.
+      <br>It there's nothing there it's a file.
+      <pre><code data-trim>
+        ls -l
+      </code></pre>
+      `ls -l` gives a lot more information too, such as the size of the file:
+      <pre><code data-trim>
+        &ltfile permissions&gt &ltnumber of links&gt &ltowner&gt &ltgroup&gt &ltsize&gt &ltmonth&gt &ltday&gt &lttime&gt &ltfilename&gt
+      </code></pre>
+    </ul>
+  </font>
+</section>
+
+<section id="arguments">
+  <h1>Arguments</h1>
+  <font size=6>
+    <ul>
+      Most programs take additional arguments that control their exact
+      behavior. For example, `-F` and `-l` are arguments to `ls`.
+      <pre><code data-trim>
+        man ls
+      </code></pre>
+      This will open the manual page for `ls`.
+      Use the space key to go forward and b to go backwards.
+      When you are done reading, just hit `q` to quit.
+      <br>Alternative:
+      <pre><code data-trim>
+        ls --help
+      </code></pre>
+      Programs that are run from the shell can get extremely complicated.
+      To see an example, open up the manual page for the `find` program.
+      No one can possibly learn all of these arguments, of course.
+      So you will probably find yourself referring back to the manual page frequently.
+    </ul>
+  </font>
+</section>
+
+<section id="structure">
+  <h1>The Unix directory file structure</h1>
+  <font size=6>
+    <ul>
+      When we started we first did something like go to the folder of our username.
+      Then we opened 'tutorial-shell-genomics' then 'data'.
+    </ul>
+    <div>
+        <img src="modules/the-unix-shell/file_structure.png" align="center">
+    </div>
+    <ul>
+      This is called a hierarchical file system structure, like an upside down
+      tree with root (/) at the base that looks like this. That (/) at the base
+      is often also called the 'top' level.
+      When you are working at your computer or log in to a remote computer,
+      you are on one of the branches of that tree, your home directory (/home/username).
+    </ul>
+  </font>
+</section>
+
+<section id="structure2">
+  <h1>The Unix directory file structure</h1>
+  <font size=6>
+    <ul>
+      <pre><code data-trim>
+        whoami
+      </code></pre>
+      This tells you your user name.
+      <br>Alternative:
+      <pre><code data-trim>
+        echo $USER
+      </code></pre>
+      `USER` is a variable which can be accessed with `$USER` or `${USER}`.
+      <pre><code data-trim>
+        J=Jorge
+        echo ${J}
+      </code></pre>
+      Spaces …
+      <pre><code data-trim>
+        J="Jorge Boucas"
+        echo ${J}
+      </code></pre>
+    </ul>
+  </font>
+</section>
+
+<section id="structure3">
+  <h1>The Unix directory file structure</h1>
+  <font size=6>
+    <ul>
+      <pre><code data-trim>
+        cd
+      </code></pre>
+      This puts you in your home directory.
+      <br>Now using `cd` and `ls`, go in to the 'tutorial-shell-genomics'
+      directory and list its contents.
+      <br>Let's also check to see where we are. Sometimes when we're wandering around in the file system, it's easy to lose track of where we are and get lost.
+      <pre><code data-trim>
+        pwd
+      </code></pre>
+      This stands for 'print working directory'. The directory you're currently working in.
+      To go 'back up a level' we need to use `..` ie.
+      <pre><code data-trim>
+        cd ..
+      </code></pre>
+    </ul>
+  </font>
+</section>
+
+<section id="exercise1">
+  <h1>Exercise</h1>
+  Move around in the 'hidden' directory and try to find the file 'youfoundit.txt'.
+</section>
+
+<section id="contents">
+  <h1>Examining the contents of other directories</h1>
+  <font size=6>
+    <ul>
+      <pre><code data-trim>
+        cd
+        ls shell-genomics-edamame
+      </code></pre>
+      This will list the contents of the `edamame-data` directory without you having to navigate there.
+      <pre><code data-trim>
+        cd
+        cd shell-genomics-edamame/edamame-data/hidden
+      </code></pre>
+        This will make you jump directly to `hidden` without having to go through the intermediate directory.
+    </ul>
+  </font>
+</section>
+
+<section id="exercise2">
+  <h1>Exercise</h1>
+  Try finding the 'anotherfile.txt' file without changing directories.
+</section>
+
+<section id="tab">
+  <h1>Shortcut: Tab Completion</h1>
+  <font size=6>
+    <ul>
+      <pre><code data-trim>
+        cd
+        cd s&lttab&gt
+      </code></pre>
+      The shell will fill in the rest of the directory name for `shell-genomics-edamame`.
+      Now go to `shell-genomics-edamame/edamame-data/MiSeq`
+      <pre><code data-trim>
+        ls F3D&lttab&gt&lttab&gt
+      </code></pre>
+      When you hit the first tab, nothing happens. The reason is that there are multiple files in the directory which start with `F3D`.
+      <br>Tab completion can also fill in the names of programs. For example, enter `e<tab><tab>`. You will see the name of every program that starts with an `e`. One of those is `echo`. If you enter `ec<tab>` you will see that tab completion works.
+    </ul>
+  </font>
+</section>
+
+<section id="paths">
+  <h1>Full vs. Relative Paths</h1>
+  <font size=6>
+    <ul>
+      <pre><code data-trim>
+        cd
+        pwd
+      </code></pre>
+      The output is the full name of your home directory. This tells you that
+      you are in a directory called `username`, which sits inside a directory
+      called `home` which sits inside the very top directory in the hierarchy.
+      The very top of the hierarchy is a directory called `/` which is usually
+      referred to as the *root directory*.
+      <pre><code data-trim>
+        cd /home/&ltusername&gt/shell-genomics-edamame/edamame-data/hidden
+      </code></pre>
+      This is the full path approach.
+      <pre><code data-trim>
+        cd
+        cd edamame-data/shell/hidden
+      </code></pre>
+      This is the relative path approach.
+    </ul>
+  </font>
+</section>
+
+<section id="links">
+  <h1>Symbolic links</h1>
+  <font size=6>
+    <ul>
+      <pre><code data-trim>
+        cd
+        ln –s cd /home/&ltusername&gt/shell-genomics-edamame/edamame-data/hidden hid
+      </code></pre>
+      This will create a symbolic link called `hid` which will take you to the folder `/home/&ltusername&gt/shell-genomics-edamame/edamame-data/hidden`.
+      <br>Check out the content of your home folder:
+      <pre><code data-trim>
+       ls –l ~/
+      </code></pre>
+      Check out the contents of `hid`:
+      <pre><code data-trim>
+       ls hid
+      </code></pre>
+      Remove a symbolic link:
+      <pre><code data-trim>
+       unlink hid
+      </code></pre>
+    </ul>
+  </font>
+</section>
+
+<section id="exercise3">
+  <h1>Exercise</h1>
+  List the contents of the /bin directory. Do you see anything familiar in there?
+</section>
+
+<section id="dataset">
+  <h1>Our data set: FASTQ files</h1>
+  <ul>
+    We did an experiment and want to look at the bacterial communities of <b><u>mice
+    in two treatments</u></b> using 16S sequencing. We have <b><u>10 mice in one treatment
+    and 9 in another</u></b> treatment. We also sequenced a <b><u>Mock community</u></b>, so we
+    can check the quality of our data. So, we have <b><u>20 samples</u></b> all together and
+    we've done <b><u>paired-end MiSeq sequencing</u></b>.
+    <br>
+    <br>We get our data back from the sequencing center as <b><u>FASTQ files</u></b>, and we stick them all in a folder called MiSeq. This data is actually the data we're going to use for several sections of the course, and it's data generated by Pat Schloss.
+    <br>
+    <br>We want to be able to look at these files and do some things with them.
+  </ul>
+</section>
+
+<section id="shortcuts">
+  <h1>Saving time with shortcuts</h1>
+  <font size=6>
+    <ul>
+      <pre><code data-trim>
+        cd; cd shell-genomics-edamame; cd edamame-data
+      </code></pre>
+      `;` is just another way of doing a line break.
+      <br>Now try:
+      <pre><code data-trim>
+       ls ~
+      </code></pre>
+      This prints the contents of your home directory, without you having to type the full path.
+      <br>The shortcut `..` always refers to the directory above your current directory. Thus:
+      <pre><code data-trim>
+       ls ..
+      </code></pre>
+      prints the contents of the `/home/&ltusername&gt/shell-genomics-edamame`. You can chain these together, so:
+      <pre><code data-trim>
+       ls ../../
+      </code></pre>
+      prints the contents of `/home/&ltusername&gt` which is your home directory.
+    </ul>
+  </font>
+</section>
+
+<section id="wildcards">
+  <h1>Saving time with wild cards</h1>
+  <font size=6>
+    <ul>
+      Navigate to the `~/shell-genomics-edamame/edamame-data/MiSeq` directory.
+      <br>
+      <br>The `*` character is a shortcut for "everything". Thus, if you enter `ls *`, you will see all of the contents of a given directory. Now try this command:
+      <pre><code data-trim>
+        ls *fastq
+      </code></pre>
+      This lists every file that ends with a `fastq`. This command:
+      <pre><code data-trim>
+        ls /usr/bin/*.sh
+      </code></pre>
+      lists every file in `/usr/bin` that ends in the characters `.sh`.
+      <br>We have paired end sequencing, so for every sample we have two files. If we want to just see the list of the files for the forward direction sequencing we can use:
+      <pre><code data-trim>
+        ls *R1*fastq
+      </code></pre>
+      <br>
+      What happens if you do `R1*fastq`?
+    </ul>
+  </font>
+</section>
+
+<section id="exercise4">
+  <h1>Exercise</h1>
+  <font size=6>
+    <ol>
+      Do each of the following using a single `ls` command without navigating to a different directory.
+      <br>
+      <br>1. List all of the files in `/bin` that start with the letter 'c'
+      <br>2. List all of the files in `/bin` that contain the letter 'a'
+      <br>3. List all of the files in `/bin` that end with the letter 'o'
+      <br><br>
+      BONUS: List all of the files in '/bin' that contain the letter 'a' or 'c'.
+    </ol>
+  </font>
+</section>
+
+<section id="history">
+  <h1>Command History</h1>
+  <font size=6>
+    <ul>
+      The <b>up/down arrow</b> takes you backwards/forwards in the command history.
+      <br><b>^-C</b> will cancel the command you are writing, and give you a fresh prompt.
+      <br><b>^-R</b> will do a reverse-search through your command history.
+      <br>You can also review your recent commands with the `history` command:
+      <pre><code data-trim>
+        history
+      </code></pre>
+      You can reuse one of these commands directly by referring to the number of that command.
+      <br>If your history looked like this:
+      <pre><code data-trim>
+        259  ls *
+        260  ls /usr/bin/*.sh
+        261  ls *R1*fastq
+      </code></pre>
+      then you could repeat command #260 by simply entering:
+      <pre><code data-trim>
+        !260
+      </code></pre>
+    </ul>
+  </font>
+</section>
+
+<section id="exercise5">
+  <h1>Exercise</h1>
+    Find the line number in your history for the last exercise
+    (listing files in /bin) and reissue that command.
+</section>
+
+<section id="examining">
+  <h1>Examining Files</h1>
+    <ul>
+      The easiest way to examine a file is to just print out all of the contents using the program `cat`. Enter the following command:
+      <pre><code data-trim>
+        cat F3D0_S188_L001_R1_001.fastq
+      </code></pre>
+    </ul>
+</section>
+
+<section id="exercise6">
+  <h1>Exercise</h1>
+  <ul>
+    1. Print out the contents of the `~/shell-genomics-edamame/edamame-data/MiSeq/stability.files` file. What does this file contain?
+    <br>
+    <br>2. Without changing directories, (you should still be in `edamame-data`), use one short command to print the contents of all of the files in the `/home/<username>/shell-genomics-edamame/edamame-data/MiSeq` directory.
+  </ul>
+</section>
+
+<section id="examining2">
+  <h1>Examining Files</h1>
+  <font size=6>
+    <ul>
+      `cat` is a terrific program, but when the file is really big, it can be annoying to use. The program, `less`, is useful for this case. Enter the following command:
+      <pre><code data-trim>
+      less F3D0_S188_L001_R1_001.fastq
+      </code></pre>
+      Some commands in `less`:
+    </ul>
+    <div class="column">
+      <ul style="padding-left: 150px;">
+        <b>Key</b>
+        <br>space
+        <br>b
+        <br>g
+        <br>G
+        <br>1
+      </ul>
+    </div>
+
+    <div class="column">
+      <ul style="padding-left: 0px;">
+        <b>Action</b>
+        <br>to go forward
+        <br>to go backward
+        <br>to go to the beginning
+        <br>to go to the end
+        <br>to quit
+      </ul>
+    </div>
+    <ul>
+      `less` also gives you a way of searching through files. Just hit the "/" key to begin a search. Enter the name of the word you would like to search for and hit enter. It will jump to the next location where that word is found. Try searching the `dictionary.txt` file for the word "cat".
+    </ul>
+  </font>
+</section>
+
+<section id="examining3">
+  <h1>Examining Files</h1>
+  <font size=6>
+    <ul>
+      If you hit "/" then "enter", `less` will just repeat the previous search.
+      <b>`less` searches from the current location and works its way forward</b>. If
+      you are at the end of the file and search for the word "cat", `less` will
+      not find it. You need to go to the beginning of the file and search.
+      <br>
+      <br>For instance, let's search for the sequence `1101:14341` in our file.
+      <br>
+      <br>You can see that we go right to that sequence and can see what it looks like.
+      <br>
+      <br>Remember, the `man` program actually uses `less` internally and therefore
+      uses the same commands, so you can search documentation using "/" as well!
+    </ul>
+  </font>
+</section>
+
+<section id="examining4">
+  <h1>Examining Files</h1>
+  <font size=6>
+    <ul>
+      The commands are `head` and `tail` and they just let you look at the
+      beginning and end of a file respectively.
+      <pre><code data-trim>
+        head F3D0_Shead F3D0_S188_L001_R1_001.fastq
+        tail F3D0_S188_L001_R1_001.fastq188_L001_R1_001.fastq
+      </code></pre>
+      The `-n` option to either of these commands can be used to print the
+      first or last `n` lines of a file. To print the first/last line of the
+      file use:
+      <pre><code data-trim>
+         head –n 1 F3D0_Shead F3D0_S188_L001_R1_001.fastq
+         tail –n 1 F3D0_S188_L001_R1_001.fastq188_L001_R1_001.fastq
+      </code></pre>
+    </ul>
+  </font>
+</section>
+
+<section id="searching">
+  <h1>Searching files</h1>
+  <font size=6>
+    <ul>
+      `grep` is a command-line utility for searching plain-text data sets for
+      lines matching a string or regular expression.
+      <br>
+      <br>Let's search for that sequence 1101:14341 in the F3D0_S188_L001_R1_001.fastq file.
+      <pre><code data-trim>
+        grep 1101:14341 F3D0_S188_L001_R1_001.fastq
+      </code></pre>
+      What if we wanted all four lines, the whole part of that FASTQ sequence, back instead.
+      <pre><code data-trim>
+        grep -A 3 1101:14341 F3D0_S188_L001_R1_001.fastq
+      </code></pre>
+      The `-A` flag stands for "after match" so it's returning the line that
+      matches plus the three after it.
+      The `-B` flag returns that number of lines before the match.
+    </ul>
+  </font>
+</section>
+
+<section id="exercise7">
+  <h1>Exercise</h1>
+  <ul>
+    Search for the sequence 'TTATCCGGATTTATTGGGTTTAAAGGGT' in the
+    F3D0_S188_L001_R1_001.fastq file and in the output have the sequence name
+    and the sequence. e.g.
+    <br>
+    <br>@M00967:43:000000000-A3JHG:1:2114:11799:28499 1:N:0:188
+    <br>TACGGAGGATGCGAGCGTTATCCGGATTTATTGGGTTTAAAGGGTGCGTAGGC
+    <br>
+    <br>Search for that sequence in all the FASTQ files.
+  </ul>
+</section>
+
+<section id="redirection1">
+  <h1>Redirection</h1>
+  <font size=6>
+    <ul>
+      All those sequences just went whizzing by with grep. How can we capture them?
+      <br>The redirection command for putting something in a file is `>`
+      <pre><code data-trim>
+        grep -B 2 TTATCCGGATTTATTGGGTTTAAAGGGT * > good-data.txt
+        ls
+      </code></pre>
+      `>>` does the same as `>` but appending the ouput to file in case it already exists.
+    </ul>
+  </font>
+</section>
+
+<section id="redirection2">
+  <h1>Redirection</h1>
+  <font size=6>
+    <ul>
+      The `|` takes the output that scrolling by on the terminal and then can
+      run it through another command.
+      <pre><code data-trim>
+        grep TTATCCGGATTTATTGGGTTTAAAGGGT * | less
+      </code></pre>
+      Now we can use the arrows to scroll up and down and use `q` to get out.
+      <br>
+      <br>`wc` stands for `word count`. It counts the number of lines or characters.
+      <pre><code data-trim>
+        grep TTATCCGGATTTATTGGGTTTAAAGGGT * | wc
+      </code></pre>
+      That tells us the number of lines, words and characters in the file.
+      If we just want the number of lines, we can use the `-l` flag for `lines`.
+      <pre><code data-trim>
+        grep TTATCCGGATTTATTGGGTTTAAAGGGT * | wc –l
+      </code></pre>
+    </ul>
+  </font>
+</section>
+
+<section id="create">
+  <h1>Creating, moving, copying, and removing</h1>
+  <font size=6>
+    <ul>
+      Navigate to the `data` directory. Lets copy the file using the `cp` command.
+      <pre><code data-trim>
+        cp stability.files stability.files_backup
+      </code></pre>
+      The `mkdir` command is used to make a directory.
+      <pre><code data-trim>
+       mkdir backup
+      </code></pre>
+      We can move files around using the command `mv`.
+      <pre><code data-trim>
+       mv stability.files_backup backup/
+      </code></pre>
+      This moves `stability.files_backup` into the directory `backup/` or the full path would be `~/edamame-data/shell/MiSeq/backup`
+    </ul>
+  </font>
+</section>
+
+<section id="create2">
+  <h1>Creating, moving, copying, and removing</h1>
+  <font size=6>
+    <ul>
+      The `mv` command is also how you rename files.
+      <pre><code data-trim>
+        mv stability.files stability.files_IMPORTANT
+      </code></pre>
+      The `rm` file removes the file. Be careful with this command. It doesn't
+      just nicely put the files in the Trash. They're really gone.
+      <pre><code data-trim>
+        rm backup/stability.files_backup
+      </code></pre>
+      By default, `rm`, will NOT delete directories. You can tell `rm` to delete a directory using the `-r` option. Let's delete that `new` directory we just made. Enter the following command:
+      <pre><code data-trim>
+        rm -r new
+      </code></pre>
+    </ul>
+  </font>
+</section>
+
+<section id="exercise8">
+  <h1>Exercise</h1>
+  <ul>
+    Do the following:
+    <br>
+    <br>1.  Rename the `stability.files_IMPORTANT` file to `stability.files`.
+    <br>2.  Create a directory in the `MiSeq` directory called `new`
+    <br>3.  Then, copy the `stability.files` file into `new`
+  </ul>
+</section>
+
+<section id="write">
+  <h1>Writing files</h1>
+  <font size=6>
+    <ul>
+      To write in files, we're going to use the program `nano`. We're going to
+      create a file that contains the favorite grep command so you can remember
+      it for later. We'll name this file 'awesome.sh’.
+      <pre><code data-trim>
+        nano awesome.sh
+      </code></pre>
+      </ul>
+      <div>
+          <img src="modules/the-unix-shell/nano.png" align="center">
+      </div>
+      <ul>
+      Type `Ctrl-X`. It will ask if you want to save it. Type `y` for yes.
+      Then it asks if you want that file name. Hit 'Enter'.
+    </ul>
+  </font>
+</section>
+
+<section id="exercise9">
+  <h1>Exercise</h1>
+  <ul>
+    <br>Open 'awesome.sh' and add "echo AWESOME!" after the grep command and save the file.
+    <br>
+    <br>We're going to come back and use this file in just a bit.
+  </ul>
+</section>
+
+<section id="programs">
+  <h1>Running programs</h1>
+  <font size=6>
+    <ul>
+      Commands like `ls`, `rm`, `echo`, and `cd` are just ordinary programs on the computer. A program is just a file that you can *execute*. The program `which` tells you the location of a particular program. For example:
+      <pre><code data-trim>
+        which ls
+        which find
+      </code></pre>
+      <br>
+      When we enter a program name and hit enter, there are a few standard places that the shell automatically looks. Enter the command:
+      <pre><code data-trim>
+        echo $PATH
+      </code></pre>
+    </ul>
+  </font>
+</section>
+
+<section id="programs2">
+  <h1>Running programs</h1>
+  <font size=6>
+    <ul>
+      Navigate to the `edamame-data` directory and list the contents. Try to run the program `hello.sh` by entering:
+      <pre><code data-trim>
+        hello.sh
+      </code></pre>
+      <br>
+      You should get an error saying that hello.sh cannot be found. That is
+      because the directory `/home/username/edamame-data/shell` is not in the
+      `PATH`. You can run the `hello.sh` program by entering:
+      <pre><code data-trim>
+        ./hello.sh
+      </code></pre>
+      Remember that `.` is a shortcut for the current working directory. You can
+      run `hello.sh` equally well by specifying one of the following options:
+      <pre><code data-trim>
+         /home/&ltusername&gt/shell-genomics-edamame/edamame-data/hello.sh
+         ~/shell-genomics-edamame/edamame-data/hello.sh
+      </code></pre>
+    </ul>
+  </font>
+</section>
+
+<section id="scritps1">
+  <h1>Running scripts</h1>
+  <font size=6>
+    <ul>
+      Go in to the 'MiSeq' directory where we created 'awesome.sh' before.
+      It's a command, so we should just be able to run it. Give it a try.
+      <pre><code data-trim>
+        ./awesome.sh
+      </code></pre>
+      To do that we have to make it 'executable'. We do this by changing its
+      mode. The command for that is `chmod` - change mode. We're going to change
+      the mode of this file, so that it's executable and the computer knows it's
+      OK to run it as a program.
+      <pre><code data-trim>
+        chmod +x awesome.sh
+      </code></pre>
+      Try running it again:
+      <pre><code data-trim>
+        ./awesome.sh
+      </code></pre>
+      Alternative, change permissions while changing mode:
+      <pre><code data-trim>
+        chmod 755 awesome.sh ; ./awesome.sh
+      </code></pre>
+    </ul>
+  </font>
+</section>
+
+<section id="permissions">
+  <h1>Permissions</h1>
+  <font size=6>
+    <ul>
+    <div>
+        <img src="modules/the-unix-shell/permissions.png" align="center">
+    </div>
+  </ul>
+</font>
+</section>
+
+<section id="loops">
+  <h1>Loops</h1>
+  <font size=6>
+    <ul>
+      Syntax:
+      <pre><code data-trim>
+        for &ltvariable&gt in &ltvariables&gt ;
+            do
+            echo ${&ltvariable&gt}
+        done
+      </code></pre>
+      Example:
+      <pre><code data-trim>
+        for name in jorge franziska rafael daniel ;
+            do
+            echo ${name}
+        done
+      </code></pre>
+      Alternative:
+      <pre><code data-trim>
+        items_variable="jorge franziska rafael daniel"
+        for item in ${items_variable} ;
+            do
+            echo ${item}
+        done
+      </code></pre>
+  </ul>
+</font>
+</section>
+
+<section id="loops2">
+  <h1>Loops</h1>
+  <font size=6>
+    <ul>
+      Syntax:
+      <pre><code data-trim>
+        while &ltcondition TRUE&gt ;
+            do
+            &ltsomething&gt
+        done
+      </code></pre>
+      Example:
+      <pre><code data-trim>
+        while read line ;
+            do
+            echo ${line}
+        done < file.txt
+      </code></pre>
+    </ul>
+  </font>
+</section>
+
+<section id="ifs">
+  <h1>IF statements</h1>
+  <font size=6>
+    <ul>
+      Syntax:
+      <pre><code data-trim>
+        if [ &ltcondition TRUE&gt ] ;
+            then
+              &ltsomething&gt
+            else;
+            &ltsomething else&gt
+            fi
+      </code></pre>
+      Example:
+      <pre><code data-trim>
+        J=Jorge
+        if [ ${J} == "Jorge" ] ;
+            then
+            echo ${J}
+        else;
+            echo "This is not Jorge"
+        fi
+      </code></pre>
+    </ul>
+  </font>
+</section>
+
+<section id="files">
+  <h1>Shell files</h1>
+  <font size=6>
+    <ul>
+      From `man bash`:
+      <pre><code data-trim>
+        /bin/bash
+               The bash executable
+        /etc/profile
+               The systemwide initialization file, executed for login shells
+        ~/.bash_profile
+               The personal initialization file, executed for login shells
+        ~/.bashrc
+               The individual per-interactive-shell startup file
+        ~/.bash_logout
+               The individual login shell cleanup file, executed when a login shell exits
+        ~/.inputrc
+               Individual readline initialization file
+      </code></pre>
+      Example `~/.bash_profile`
+      <pre><code data-trim>
+        export LC_ALL=en_US.UTF-8
+        export LANG=en_US.UTF-8
+        export PATH=~/soft/bin:$PATH
+        source /software/Modules/modules.rc
+        export PS1="\[\033[01;32m\]\h\[\033[00m\]:\[\033[01;34m\]\$CurDir\$\[\033[00m\] "
+      </code></pre>
+    </ul>
+  </font>
+</section>
+
+<section id="others">
+  <h1>Others</h1>
+  <font size=6>
+    <ul>
+      Disk usage of a folder. Example, your home folder:
+      <pre><code data-trim>
+        cd ~ ; du –sh .
+      </code></pre>
+      Connecting to a remote server over a Secure Shell (ssh) – ssh username@remote.adress :
+      <pre><code data-trim>
+        ssh JBoucas@amalia.age.mpg.de
+      </code></pre>
+      Copying files over ssh to your home folder on a remote server:
+      <pre><code data-trim>
+        scp file.txt UName@ServerAddress:~/
+      </code></pre>
+      Copying files over ssh from your home folder on a remoter server:
+      <pre><code data-trim>
+        scp UName@ServerAddress:~/file.txt .
+      </code></pre>
+      Both `scp` will only allow you to copy files (not directories) unless you
+      use the `-r` argument for `recursively`.
+    </ul>
+  </font>
+</section>
+
+<section id="end">
+  <h1>END</h1>
+  <font size=6>
+      <br>
+      <br>
+      <br><a href="mailto:jorge.boucas@age.mpg.de">jorge.boucas@age.mpg.de</a>
+      <br><br><a href="mailto:bioinformatics@age.mpg.de">bioinformatics@age.mpg.de</a>
+      <br><br><a href="https://mpg-age-bioinformatics.github.io">https://mpg-age-bioinformatics.github.io</a>
+  </font>
+</section>
+
+<section id="help-your-self-on-a-remote-server">
+  <h1>Help yourself on a remote server</h1>
+  <p><highlight>Welcome to the "Help yourself on a remote server" tutorial.<highlight></p>
+  <p>At the end of the this tutorial you will be able to move around in a shell, run software, write and run scripts on a remote server.
+    <br>For questions or suggestions  feel free to <a href="mailto:jorge.boucas@age.mpg.de">contact</a> us.</p>
+  <aside class="notes" data-markdown>
+  This tutorial is preceeded by The Unix Shell.
+  </aside>
+</section>
+
+<section id="outline2">
+  <h1>Outline</h1>
+  <font size="6" align="left">
+      <ul style="padding-left: 100px;">
+        <li>What is the shell?
+        <br><li>Connecting to a remote server
+        <br><li>Copying files to/from a remote server
+        <br><li>The modules system
+        <br><li>Shifter/Docker for HPC
+        <br><li>Installing software without `su` access
+        <br><li>Installing R packages
+        <br><li>Installing python packages
+        <br><li>Shortcut: Tab Completion
+        <br><li>Installing perl packages
+        <br><li>SLURM
+      </ul>
+  </font>
+</section>
+
+<section id="connecting">
+  <h1>Connecting to a remote server</h1>
+  <font size=6>
+    <ul>
+      Connecting to a remote server over a Secure Shell (ssh)
+      – ssh username@remote.adress :
+      <pre><code data-trim>
+        ssh JBoucas@amalia.age.mpg.de
+      </code></pre>
+      With X forwarding:
+      <pre><code data-trim>
+        ssh –X JBoucas@amalia.age.mpg.de
+      </code></pre>
+    </ul>
+  </font>
+</section>
+
+<section id="rcfiles">
+  <h1>Download rc files for your user into your home folder in amalia</h1>
+    <ul>
+      <font size=6>
+      <pre><code data-trim>
+        cd
+
+        wget https://raw.githubusercontent.com/\
+        mpg-age-bioinformatics/cluster_first_steps/master/.bashrc
+
+        wget https://raw.githubusercontent.com/\
+        mpg-age-bioinformatics/cluster_first_steps/master/.bash_profile
+
+        source ~/.bash_profile
+        source ~/.bashrc
+      </code></pre>
+      Remember that next time you login this files will be automatically sourced.
+    </ul>
+  </font>
+</section>
+
+<section id="scp">
+  <h1>Copying files to/from a remote server</h1>
+    <ul>
+      <font size=6>
+        Copying files over ssh <u>to</u> your home folder on a remote server:
+        <pre><code data-trim>
+          scp file.txt UName@ServerAddress:~/
+        </code></pre>
+        Copying files over ssh <u>from</u> your home folder on a remote server:
+        <pre><code data-trim>
+          scp UName@ServerAddress:~/file.txt .
+        </code></pre>
+        Both `scp` will only allow you to copy files (not directories)
+        unless you use the `-r` argument for `recursively`.
+        For speed use `-o Cipher=arcfour`.
+        <br>rsync to a remote server
+        <pre><code data-trim>
+          rsync –rtvh –e "ssh –c arcfour" source_folder \
+          UName@ServerAddress:destination
+        </code></pre>
+        Not all servers will have the less costly cipher arcfour
+        encryption algorithm and therefore you can remove the whole
+        `-e "ssh –c arcfour"` block.
+    </ul>
+  </font>
+</section>
+
+<section id="modules">
+  <h1>The modules system</h1>
+    <ul>
+      <font size=6>
+        A centralized software system.
+        The modules system <b>loads software</b> (version of choice)
+        and changes <b>environment</b> variables (eg. LD_LIBRARY_PATH)
+    </ul>
+        <div class="column">
+          <pre><code data-trim>
+            module avail
+            module whatis samtools
+            module show samtools
+            module load samtools
+            module list
+            module unload samtools
+            module purge
+          </code></pre>
+        </div>
+
+        <div class="column">
+            <pre><code data-trim>
+            # shows available modules
+            # shows a description of the samtools module
+            # shows environment changes for samtools
+            # loads samtools
+            # lists all loaded modules
+            # unloads the samtools module
+            # unloads all loaded modules
+          </code></pre>
+        </div>
+    <ul>
+        more on <a href="http://modules.sourceforge.net">http://modules.sourceforge.net</a>
+    </ul>
+  </font>
+</section>
+
+<section id="docker">
+  <h1>Shifter/Docker for HPC</h1>
+  <br><i>Mobile, ready to go, reproducible science!</i>
+</section>
+
+<section id="computers">
+  <h1>Computers are not all the same</h1>
+  <div style="position: absolute; left: 0.2em">
+  <img src="modules/the-unix-shell/docker1.png" class="fragment fade-out" data-fragment-index="1"/>
+  </div>
+  <div style="position: absolute; left: 0.2em" class="fragment fade-in" data-fragment-index="1">
+  <img src="modules/the-unix-shell/docker2.png" class="fragment fade-out" data-fragment-index="2"/>
+  </div>
+  <div style="position: absolute; left: 0.2em" class="fragment fade-in" data-fragment-index="2">
+  <img src="modules/the-unix-shell/docker3.png"/>
+  </div>
+</section>
+
+<section id="containers">
+  <h1>Containers</h1>
+  <div style="position: absolute; left: 3.5em">
+  <img src="modules/the-unix-shell/docker6.png" width="900" class="fragment fade-out" data-fragment-index="1"/>
+  </div>
+  <div style="position: absolute; left: 3.5em" class="fragment fade-in" data-fragment-index="1">
+  <img src="modules/the-unix-shell/docker5.png" width="900" class="fragment fade-out" data-fragment-index="2"/>
+  </div>
+  <div style="position: absolute; left: 3.5em" class="fragment fade-in" data-fragment-index="2">
+  <img src="modules/the-unix-shell/docker4.png" width="900"/>
+  </div>
+</section>
+
+<section id="shifter">
+  <h1>Shifter/Docker for HPC</h1>
+    <ul>
+      <font size=6>
+        load respective module
+        <pre><code data-trim>
+          module load shifter
+        </code></pre>
+        list available images
+        <pre><code data-trim>
+          shifterls
+        </code></pre>
+        get an interactive shell on ubuntu and check
+        that you are in the intended image
+        <pre><code data-trim>
+          shifter --image=ubuntu:15.10 bash -login
+          cat /etc/lsb-release
+        </code></pre>
+        use the Bioinformatics image
+        <pre><code data-trim>
+          shifter --image=mpgagebioinformatics/bioinformatics_software:v1.0.0
+        </code></pre>
+        run a script inside an image
+        <pre><code data-trim>
+          shifter --image=&ltprovider&gt/&ltimage_name&gt:&lttag&gt /path/to/script
+        </code></pre>
+    </ul>
+  </font>
+</section>
+
+<section id="shifteri">
+  <h1>Working interactively on the mpi age bioinformatics software image</h1>
+    <ul>
+      <font size=6>
+        load respective module
+        <pre><code data-trim>
+          module load shifter
+        </code></pre>
+        list available images
+        <pre><code data-trim>
+          shifterls
+        </code></pre>
+        check if you have R
+        <pre><code data-trim>
+          which R
+        </code></pre>
+        login to our software image
+        <pre><code data-trim>
+          shifter --image=mpgagebioinformatics/bioinformatics_software:v1.1.0
+          pwd
+          module avail
+          module load rlang
+          which R
+        </code></pre>
+        You will now see `R`'s path in the image.
+    </ul>
+  </font>
+</section>
+
+<section id="shifters">
+  <h1>Running a script inside the mpi age bioinformatics software image</h1>
+    <ul>
+      <font size=6>
+        Example `~/test.shifter.sh`:
+        <pre><code data-trim>
+          #!/bin/bash
+          source ~/.bashrc
+
+          module load rlang python
+
+          which python
+
+          python << EOF
+          print "This is python"
+          EOF
+
+          which R
+
+          Rscript -e "print('This is R')"
+        </code></pre>
+        Running the script:
+        <pre><code data-trim>
+          chmod +x test.shifter.sh
+          shifter \
+            --image=mpgagebioinformatics/bioinformatics_software:v1.0.1 \
+            ./test.sh
+        </code></pre>
+      </font>
+    </ul>
+</section>
+
+<section id="shifterinfos">
+  <h1>Running a script inside the mpi age bioinformatics software image</h1>
+    <ul>
+      <font size=6>
+        More infos on
+        	<br>&nbsp&nbsp&nbsp&nbsp shifter,
+        	<br>&nbsp&nbsp&nbsp&nbsp docker (eg. for your own laptop),
+        	<br>&nbsp&nbsp&nbsp&nbsp singularity (running @ draco.mpcdf.mpg.de),
+        	<br>&nbsp&nbsp&nbsp&nbsp and creation of images on
+
+        	<br>&nbsp&nbsp&nbsp&nbsp <a href="http://bioinformatics.age.mpg.de/#callout">http://bioinformatics.age.mpg.de/#callout</a>  > Jupyter on Docker
+        	<br>&nbsp&nbsp&nbsp&nbsp <a href="https://github.com/mpg-age-bioinformatics/cluster_first_steps#shifter">https://github.com/mpg-age-bioinformatics/cluster_first_steps#shifter</a>
+
+        <br><br>More infos on our software image and how to run it on your laptop:
+        	<br>&nbsp&nbsp&nbsp&nbsp <a href="https://github.com/mpg-age-bioinformatics/software_docker#software-container">https://github.com/mpg-age-bioinformatics/software_docker#software-container</a>
+      </font>
+      </ul>
+</section>
+
+<section id="avail">
+  <h1>module avail</h1>
+    <ul>
+      <font size=6>
+        Example `module avail` output.
+        <pre><code data-trim>
+          ------------------------- /modules/modulefiles/bioinformatics -------------------------
+          bedtools/2.26.0(default)  hisat/2.0.4(default)      spades/3.10.0(default)
+          bowtie/2.2.9(default)     igvtools/2.3.89(default)  sratoolkit/2.8.1(default)
+          bwa/0.7.15(default)       lofreq/2.1.2(default)     star/2.5.2b(default)
+          bwtool/face601(default)   methpipe/3.4.3(default)   stringtie/1.3.0(default)
+          cufflinks/2.2.1(default)  picard/2.8.1(default)     tophat/2.1.1(default)
+          fastqc/0.11.5(default)    samtools/1.3.1(default)   vcftools/0.1.14(default)
+          gatk/3.4.46               skewer/0.2.2(default)     walt/1.0.0(default)
+          gatk/4.beta.5(default)    snpeff/4.3.i(default)
+          ---------------------------- /modules/modulefiles/general -----------------------------
+          java/8.0.111(default)       perl/5.24.1(default)        rlang/3.3.2(default)
+          jdk/8.0.151(default)        python/2.7.12(default)      ruby/2.4.2(default)
+          jupyterhub/0.7.2(default)   python/3.6.0                ruby-install/0.6.1(default)
+          ------------------------------ /modules/modulefiles/libs ------------------------------
+          bzip2/1.0.6(default)     openblas/0.2.19(default)
+          gsl/2.4.0(default)       xz/5.2.2(default)
+        </code></pre>
+        Note the 3 distinct blocks of software being shown (bionformatics, general, libs).
+        The distinct blocks are generated by the different paths kept on the `MODULEPATH` variable set like this:
+        <pre><code data-trim>
+          export MODULEPATH=/modules/modulefiles/bioinformatics:\
+          /modules/modulefiles/general:\
+          /modules/modulefiles/libs
+        </code></pre>
+    </font>
+  </ul>
+</section>
+
+<section id="msystem">
+  <h1>The modules system</h1>
+    <ul>
+      <font size=6>
+        `module avail` simply lists the contents of the `MODULEPATH` variable.
+        <pre><code data-trim>
+          container:/modules/modulefiles/general$ tree -L 2
+          ├── java
+          │   └── 8.0.111
+          ├── jdk
+          │   └── 8.0.151
+          ├── jupyterhub
+          │   └── 0.7.2
+          ├── perl
+          │   └── 5.24.1
+          ├── python
+          │   ├── 2.7.13
+          │   └── 3.6.0
+          ├── rlang
+          │   └── 3.3.2
+          ├── ruby
+          │   └── 2.4.2
+          └── ruby-install
+              └── 0.6.1
+          8 directories, 9 files
+          </code></pre>
+          example content of a software folder in the modules folder
+          <pre><code data-trim>
+            container:/modules/modulefiles/general$ ls -al python/
+            total 20
+            drwxr-xr-x 1 root root 4096 Sep 16 11:45 .
+            drwxr-xr-x 1 root root 4096 Nov 12 15:29 ..
+            -rw-r--r-- 1 root root 1781 Sep 16 11:42 2.7.12
+            -rw-r--r-- 1 root root 1766 Sep 16 11:45 3.6.0
+            -rw-r--r-- 1 root root  137 Sep 16 11:42 .version
+          </code></pre>
+    </font>
+  </ul>
+</section>
+
+<section id="msystem2">
+  <h1>The modules system</h1>
+    <ul>
+      <font size=6>
+        <pre><code data-trim>
+          container:/modules/modulefiles/general$ ls -al python/
+          total 20
+          drwxr-xr-x 1 root root 4096 Sep 16 11:45 .
+          drwxr-xr-x 1 root root 4096 Nov 12 15:29 ..
+          -rw-r--r-- 1 root root 1781 Sep 16 11:42 2.7.12
+          -rw-r--r-- 1 root root 1766 Sep 16 11:45 3.6.0
+          -rw-r--r-- 1 root root  137 Sep 16 11:42 .version
+        </code></pre>
+        `2.7.12` module file for python 2.7.12
+        <br>`3.6.0` module file for python 3.6.0
+        <br>`.version` file defining the default version:
+        <pre><code data-trim>
+          #%Module1.0###########################################################
+          ##
+          ## version file for python
+          ##
+          set ModulesVersion      "2.7.12"
+        </code></pre>
+  </font>
+</ul>
+</section>
+
+<section id="module_file">
+  <h1>module file</h1>
+    <ul>
+      <font size=5>
+        <pre><code data-trim>
+#%Module3.2.10#####################################################################
+proc ModulesHelp { } {
+      global version
+      puts stderr "\n\tVersion 2.7.13 of python\n"
+}
+
+module-whatis   "Version 2.7.13 of python"
+
+# for Tcl script use only
+set     version      "3.2.10"
+
+conflict python
+prepend-path PATH /modules/software/python/2.7.13/bin
+prepend-path LD_LIBRARY_PATH /modules/software/python/2.7.13/lib
+prepend-path CPATH /modules/software/python/2.7.13/include
+prepend-path C_INCLUDE_PATH /modules/software/python/2.7.13/include
+prepend-path CPLUS_INCLUDE_PATH /modules/software/python/2.7.13/include
+prepend-path OBJC_INCLUDE_PATH /modules/software/python/2.7.13/include
+prepend-path MANPATH /modules/software/python/2.7.13/share/man
+prepend-path INFODIR /modules/software/python/2.7.13/share/man
+set home $::env(HOME)
+set pythonuser $home/.software_container/.python/2.7.13/bin
+exec /bin/mkdir -p $pythonuser
+prepend-path PATH $home/.software_container/.python/2.7.13/bin
+set jupyter_runtime_dir $home/.software_container/.python/2.7.13/jupyter/run
+exec /bin/mkdir -p $jupyter_runtime_dir
+setenv JUPYTER_RUNTIME_DIR $home/.software_container/.python/2.7.13/jupyter/run
+set jupyter_data_dir $home/.software_container/.python/2.7.13/jupyter/data
+exec /bin/mkdir -p $jupyter_data_dir
+setenv JUPYTER_DATA_DIR $home/.software_container/.python/2.7.13/jupyter/data
+setenv PYTHONHOME /modules/software/python/2.7.13/
+setenv PYTHONPATH /modules/software/python/2.7.13/lib/python2.7
+setenv PYTHONUSERBASE $home/.software_container/.python/2.7.13/
+exec /bin/mkdir -p $home/.software_container/.python/2.7.13/pythonpath/site-packages
+module load openblas/0.2.19
+setenv CLFAGS -I/modules/software/openblas/0.2.19/include
+setenv LDFLAGS -L/modules/software/openblas/0.2.19/lib
+        </code></pre>
+  </font>
+</ul>
+</section>
+
+<section id="module_file_1">
+  <h1>module file</h1>
+    <ul>
+      <font size=6>
+        <pre><code data-trim>
+#%Module3.2.10#####################################################################
+proc ModulesHelp { } {
+      global version
+      puts stderr "\n\tVersion 2.7.13 of python\n"
+}
+        </code></pre>
+        Help message shown for this modules with`module help python/2.7.13`
+        <pre><code data-trim>
+          module-whatis   "Version 2.7.13 of python"
+        </code></pre>
+        Message to be shown by `module whatis python/2.7.13`.
+        <pre><code data-trim>
+        # for Tcl script use only
+        set     version      "3.2.10"
+        </code></pre>
+        Modules system version.
+        <pre><code data-trim>
+          conflict python
+        </code></pre>
+        Conflicts. ie. Do not load if a different python version is already loaded.
+  </font>
+</ul>
+</section>
+
+<section id="module_file_2">
+  <h1>module file</h1>
+    <ul>
+      <font size=6>
+        <pre><code data-trim>
+          prepend-path PATH /modules/software/python/2.7.13/bin
+          prepend-path LD_LIBRARY_PATH /modules/software/python/2.7.13/lib
+          prepend-path CPATH /modules/software/python/2.7.13/include
+          prepend-path C_INCLUDE_PATH /modules/software/python/2.7.13/include
+          prepend-path CPLUS_INCLUDE_PATH /modules/software/python/2.7.13/include
+          prepend-path OBJC_INCLUDE_PATH /modules/software/python/2.7.13/include
+          prepend-path MANPATH /modules/software/python/2.7.13/share/man
+          prepend-path INFODIR /modules/software/python/2.7.13/share/man
+        </code></pre>
+        Paths prepended when the module is loaded and removed when the module is unloaded.
+        <pre><code data-trim>
+          set home $::env(HOME)
+        </code></pre>
+        `$::env(HOME)` captures the variable HOME from the environment of the user loading the module.
+        <br>`set home $::env(HOME)` sets a variable `home` to be used within the module with the result of `$::env(HOME)`.
+        <pre><code data-trim>
+          set pythonuser $home/.software_container/.python/2.7.13/bin
+        </code></pre>
+        Sets the python user variable to be used within the module.
+        <pre><code data-trim>
+          exec /bin/mkdir -p $pythonuser
+        </code></pre>
+        Executes the command `/bin/mkdir –p $pythonuser` every time the module is loaded.
+      </font>
+    </ul>
+</section>
+
+<section id="module_file_3">
+  <h1>module file</h1>
+    <ul>
+      <font size=6>
+        <pre><code data-trim>
+          prepend-path PATH $home/.software_container/.python/2.7.13/bin
+        </code></pre>
+        Prepends `$home/.software_container/.python/2.7.13/bin` to the user environment PATH variable.
+        <pre><code data-trim>
+          setenv PYTHONUSERBASE $home/.software_container/.python/2.7.13/
+          exec /bin/mkdir -p $home/.software_container/.python/2.7.13/pythonpath/site-packages
+        </code></pre>
+        Please note `PYTHONUSERBASE`
+        <pre><code data-trim>
+          module load openblas/0.2.19
+        </code></pre>
+        Loads other modules as dependencies when loading the python module.
+      </font>
+    </ul>
+</section>
+
+<section id="install">
+  <h1>Installing software without `su` access</h1>
+    <ul>
+      <font size=7>
+        Several examples can be obtained from:
+        <br><a href="https://github.com/mpg-age-bioinformatics/draco_pipelines/blob/master/software/software.sh">https://github.com/mpg-age-bioinformatics/draco_pipelines/blob/master/software/software.sh</a>
+        <br><br>Structure:
+      </ul>
+        <div>
+            <img src="modules/the-unix-shell/soft_structure.png" align="center">
+        </div>
+      <ul>
+        <pre><code data-trim>
+          mkdir –p ~/my_software/sources ~/my_software/software \
+          ~/my_software/logs  ~/my_software/modules
+        </code></pre>
+      </font>
+    </ul>
+</section>
+
+<section id="install2">
+  <h1>Installing software without `su` access</h1>
+    <ul>
+      <font size=7>
+        Download and edit the script for automatic generation of module files:
+        <pre><code data-trim>
+           cd ~/
+           wget https://raw.githubusercontent.com/mpg-age-bioinformatics/\
+           draco_pipelines/master/software/newmod.sh
+           sed -i 's/\/u\/jboucas\/modules/~\/my_software/g' newmod.sh
+           chmod +x newmod.sh
+        </code></pre>
+        Add the `~/my_software/modules` to the MODULEPATH:
+        <pre><code data-trim>
+        export MODULEPATH=$MODULEPATH:~/my_software/modules
+        </code></pre>
+        You might want to add this line to your `~/.bashrc`
+      </font>
+    </ul>
+</section>
+
+<section id="install3">
+  <h1>Installing software without `su` access</h1>
+    <ul>
+      <font size=7>
+        <pre><code data-trim>
+           cd ~/my_software/sources
+           wget http://zlib.net/pigz/pigz-2.3.4.tar.gz
+           tar -zxvf pigz-2.3.4.tar.gz
+           cd pigz-2.3.4
+           make
+           mkdir –p ~/my_software/software/pigz/2.3.4/bin
+           cp pigz unpigz ~/my_software/software/pigz/2.3.4/bin
+           ~/newmod.sh –s pigz –p ~/my_software/modules –v 2.3.4 –d 2.3.4
+        </code></pre>
+        Test it
+        <pre><code data-trim>
+         module avail
+         module show pigz/2.3.4
+         module load pigz/2.3.4
+         which pigz
+        </code></pre>
+      </font>
+    </ul>
+</section>
+
+<section id="install4">
+  <h1>Installing software without `su` access</h1>
+    <ul>
+      <font size=7>
+        <pre><code data-trim>
+           cd ~/my_software/sources
+           wget http://zlib.net/zlib-1.2.11.tar.gz
+           tar -zxvf zlib-1.2.11.tar.gz
+           cd zlib-1.2.11
+           make
+           mkdir –p ~/my_software/software/libz/1.2.11
+           ./configure –prefix=~/my_software/software/libz/1.2.11
+           make
+           make install
+           ~/newmod.sh –s libz –p ~/my_software/modules –v 1.2.11 –d 1.2.11
+        </code></pre>
+      </font>
+    </ul>
+</section>
+
+<section id="install5">
+  <h1>Installing software without `su` access</h1>
+    <ul>
+      <font size=7>
+        <pre><code data-trim data-noescape>
+           echo "<mark>#!/bin/bash
+           cd ~/my_software/sources
+           wget http://zlib.net/zlib-1.2.11.tar.gz
+           tar -zxvf zlib-1.2.11.tar.gz
+           cd zlib-1.2.11
+           make
+           mkdir –p ~/my_software/software/libz/1.2.11
+           ./configure –prefix=~/my_software/software/libz/1.2.11
+           make
+           make install
+           ~/newmod.sh –s libz –p ~/my_software/modules –v 1.2.11 –d 1.2.11</mark>
+           " > ~/my_software/logs/libz-1.2.11.sh
+           chmod +x ~/my_software/logs/libz-1.2.11.sh
+           ~/my_software/logs/libz-1.2.11.sh 2>&1 | tee \
+           ~/my_software/logs/libz-1.2.11.log
+        </code></pre>
+      </font>
+    </ul>
+</section>
+
+<section id="install6">
+  <h1>Installing software without `su` access</h1>
+    <ul>
+      <font size=6>
+        <pre><code data-trim data-noescape>
+if [ ! -f $MODF/libs/libz/1.2.8 ]; then
+  echo 'zlib-1.2.8'
+  echo '<mark>#!/bin/bash</mark>
+  <mark>module list</mark>
+  <mark>cd $SOUR</mark>
+  <mark>wget -O l.tar.gz http://zlib.net/zlib-1.2.8.tar.gz</mark>
+  <mark>mv l.tar.gz zlib-1.2.8.tar.gz</mark>
+  <mark>tar -zxvf zlib-1.2.8.tar.gz</mark>
+  <mark>cd zlib-1.2.8</mark>
+  <mark>mkdir $SOFT/libz/1.2.8</mark>
+  <mark>./configure --prefix=$SOFT/libz/1.2.8</mark>
+  <mark>make</mark>
+  <mark>make install</mark>
+  <mark>newmod.sh \</mark>
+  <mark>-s libz \</mark>
+  <mark>-p $MODF/libs/ \</mark>
+  <mark>-v 1.2.8 \</mark>
+  <mark>-d 1.2.8</mark>
+  ' > $LOGS/libz-1.2.8.sh
+  chmod 755 $LOGS/libz-1.2.8.sh
+  srun -o $LOGS/libz-1.2.8.out $LOGS/libz-1.2.8.sh
+fi
+        </code></pre>
+      </font>
+    </ul>
+</section>
+
+<section id="r">
+  <h1>Installing R packages</h1>
+    <ul>
+      <font size=7>
+        R standard packages:
+        <pre><code data-trim data-noescape>
+          base  datasets  graphics  grDevices  methods  parallel
+          stats  stats4   tcltk  tools  utils
+        </code></pre>
+        This are the only packages that should be inside `lib64/R/library`.
+        The `library` folder should have permissions `chmod -R 555 library`.
+        This will enforce the use of the `R_LIBS_USER` variable for installation of new packages.
+        <br>Alternative (eg. install biomaRt):
+        <pre><code data-trim data-noescape>
+          source("https://bioconductor.org/biocLite.R")
+          biocLite("biomaRt", lib=Sys.getenv("R_LIBS_USER"))
+        </code></pre>
+        The `lib` argument can also be used in (eg. install packrat):
+        <pre><code data-trim data-noescape>
+          install.packages("packrat", lib=Sys.getenv("R_LIBS_USER"))
+        </code></pre>
+      </font>
+    </ul>
+</section>
+
+<section id="python">
+  <h1>Installing python packages</h1>
+    <ul>
+      <font size=7>
+        Installing the AGEpy package:
+        <pre><code data-trim data-noescape>
+          module load python
+          pip install AGEpy --user
+        </code></pre>
+        Alternative 1:
+        <pre><code data-trim data-noescape>
+          module load python
+          git clone https://github.com/mpg-age-bioinformatics/AGEpy
+          cd AGEpy
+          pip install ../AGEpy --user
+        </code></pre>
+        Alternative 1b (no package control):
+        <pre><code data-trim data-noescape>
+          cd AGEpy
+          python setup.py install --user
+        </code></pre>
+        The `--user` argument will make use of the `PYTHONUSERBASE` variable.
+      </font>
+    </ul>
+</section>
+
+<section id="perl">
+  <h1>Installing perl packages</h1>
+    <ul>
+      <font size=7>
+        Perl libraries are loaded from the value of `PERL5LIB`. We have added a variable to module perl to ease local installations - `PERLUSER` - check out the content of these two variables.
+        <br>Example instalation of Log::Log4perl:
+        <pre><code data-trim data-noescape>
+          module load perl/5.24.1
+          cpanm Log::Log4perl -l $PERLUSER
+        </code></pre>
+        check where it got installed
+        <pre><code data-trim data-noescape>
+          perldoc -l Log::Log4perl
+        </code></pre>
+      </font>
+    </ul>
+</section>
+
+<section id="amalia">
+  <h1>SLURM (Simple Linux Utility for Resource Management )</h1>
+  <div>
+      <img src="modules/the-unix-shell/amalia.png" width="900" align="center">
+  </div>
+</section>
+
+<section id="slurm1">
+  <h1>SLURM: Why an HPC cluster?</h1>
+  <div>
+      <img src="modules/the-unix-shell/cluster1.png" width="900" align="center">
+  </div>
+</section>
+
+<section id="slurm2">
+  <h1>SLURM: Why an HPC cluster?</h1>
+  <div>
+      <img src="modules/the-unix-shell/cluster2.png" width="900" align="center">
+  </div>
+</section>
+
+<section id="slurm3">
+  <h1>SLURM: Why SLURM?</h1>
+  <div>
+      <img src="modules/the-unix-shell/cluster3.png" width="900" align="center">
+  </div>
+</section>
+
+<section id="slurm4">
+  <h1>SLURM: How to?</h1>
+  <div>
+      <img src="modules/the-unix-shell/cluster4.png" width="900" align="center">
+  </div>
+</section>
+
+<section id="slurm5">
+  <h1>SLURM: How to?</h1>
+  <div>
+      <img src="modules/the-unix-shell/cluster5.png" width="900" align="center">
+  </div>
+</section>
+
+<section id="slurm6">
+  <h1>SLURM: How to?</h1>
+  <div>
+      <img src="modules/the-unix-shell/cluster6.png" width="900" align="center">
+  </div>
+</section>
+
+<section id="slurm7">
+  <h1>SLURM: How to?</h1>
+  <div>
+      <img src="modules/the-unix-shell/cluster7.png" width="900" align="center">
+  </div>
+</section>
+
+<section id="slurm8">
+  <h1>SLURM: How to?</h1>
+  <div>
+      <img src="modules/the-unix-shell/cluster8.png" width="900" align="center">
+  </div>
+</section>
+
+<section id="slurm9">
+  <h1>SLURM: How to?</h1>
+  <div>
+      <img src="modules/the-unix-shell/cluster9.png" width="900" align="center">
+  </div>
+</section>
+
+<section id="slurm10">
+  <h1>SLURM: How to?</h1>
+  <div>
+      <img src="modules/the-unix-shell/cluster10.png" width="900" align="center">
+  </div>
+</section>
+
+
+<section id="slurm11">
+  <h1>SLURM: How to?</h1>
+  <div>
+      <img src="modules/the-unix-shell/cluster11.png" width="900" align="center">
+  </div>
+</section>
+
+<section id="slurm12">
+  <h1>SLURM: scripting</h1>
+  <div>
+      <img src="modules/the-unix-shell/cluster12.png" width="900" align="center">
+  </div>
+</section>
+
+<section id="slurm13">
+  <h1>SLURM with the modules system</h1>
+  <div>
+      <img src="modules/the-unix-shell/cluster13.png" width="900" align="center">
+  </div>
+</section>
+
+<section id="slurm14">
+  <h1>SLURM with shifter<br>and the modules system</h1>
+  <div>
+      <img src="modules/the-unix-shell/cluster14.png" width="900" align="center">
+  </div>
+</section>
+
+<section id="slurm15">
+  <h1>SLURM: iterating jobs over files</h1>
+  <div>
+      <img src="modules/the-unix-shell/cluster15.png" width="900" align="center">
+  </div>
+</section>
+
+<section id="slurm16">
+  <h1>SLURM: iterating jobs over files</h1>
+  <div>
+      <img src="modules/the-unix-shell/cluster16.png" width="900" align="center">
+  </div>
+</section>
+
+<section id="slurm17">
+  <h1>SLURM: iterating jobs over files</h1>
+  <div>
+      <img src="modules/the-unix-shell/cluster17.png" width="900" align="center">
+  </div>
+</section>
+
+<section id="slurm18">
+  <h1>SLURM with shifter</h1>
+  <div>
+      <img src="modules/the-unix-shell/cluster18.png" width="900" align="center">
+  </div>
+</section>
+
+<section id="slurm19">
+  <h1>SLURM: other options</h1>
+    <ul>
+      <font size=7>
+        <pre><code data-trim data-noescape>
+          --mail-type=BEGIN,END,FAIL,REQUEUE,ALL
+        </code></pre>
+        Specifies when email is sent to the job owner. The option argument may consist of a combination of the allowed mail types
+        <pre><code data-trim data-noescape>
+        --mail-user=&ltusername&gt@age.mpg.de
+        </code></pre>
+      </font>
+    </ul>
+</section>
+
+<section id="slurm20">
+  <h1>SLURM: sview</h1>
+  <div>
+      <img src="modules/the-unix-shell/sview.png" width="900" align="center">
+  </div>
+</section>
+
+<section id="slurm21">
+  <h1>SLURM: other useful commands</h1>
+    <ul>
+      <font size=6>
+        show the partitions
+        <pre><code data-trim data-noescape>
+          sinfo
+        </code></pre>
+        show information on nodes
+        <pre><code data-trim data-noescape>
+        sinfo -N -O partitionname,nodehost,cpus,cpusload,freemem,memory
+        </code></pre>
+        requires X forwarding and allows viewing and manipulation of submitted jobs
+        <pre><code data-trim data-noescape>
+        sview
+        </code></pre>
+        lists running jobs
+        <pre><code data-trim data-noescape>
+        squeue
+        </code></pre>
+        show the queue for a user
+        <pre><code data-trim data-noescape>
+        squeue -u &ltusername&gt
+        </code></pre>
+      </font>
+    </ul>
+</section>
+
+<section id="slurm22">
+  <h1>SLURM: other useful commands</h1>
+    <ul>
+      <font size=6>
+        cancels job 65673
+        <pre><code data-trim data-noescape>
+        scancel 65673
+        </code></pre>
+
+        cancels all jobs of user JBoucas
+        <pre><code data-trim data-noescape>
+        scancel -u JBoucas
+        </code></pre>
+
+        shows detailed resource information on job 43433
+        <pre><code data-trim data-noescape>
+        scontrol show job 43433
+        </code></pre>
+
+        show information on a partition
+        <pre><code data-trim data-noescape>
+        scontrol show partition &ltparition name&gt
+        </code></pre>
+
+        show information on a node
+        <pre><code data-trim data-noescape>
+        scontrol show node &ltnode name&gt
+        </code></pre>
+
+      </font>
+    </ul>
+</section>
+
+<section id="slurm23">
+  <h1>SLURM: other useful commands</h1>
+    <ul>
+      <font size=6>
+
+        starts an interactive terminal window on node15
+        <pre><code data-trim data-noescape>
+        srun -w node15 --pty bash
+        </code></pre>
+
+        submit a job3 after job1 and job2 are successfully ready
+        <pre><code data-trim data-noescape>
+        job1=$(sbatch --parsable &ltscript1&gt)
+        job2=$(sbatch --parsable &ltscript2&gt)
+        sbatch -d afterok:${job1}:${job2} &ltscript3&gt
+        </code></pre>
+
+        attach to a running job and run a command
+        <pre><code data-trim data-noescape>
+        srun --jodib &ltJOBID&gt --pty &ltcommand&gt
+        </code></pre>
+
+        change the partitions of a pending job
+        <pre><code data-trim data-noescape>
+        scontrol update job &ltjob id&gt partition=&ltpartition1&gt,&ltpartition2&gt,&ltpartition3&gt
+        </code></pre>
+
+      </font>
+    </ul>
+</section>
+
+<section id="notesser">
+  <h1>Notes</h1>
+    <ul>
+      <font size=7>
+        For current information on RStudio server and JupyterHub please check our cluster first steps page:
+        <br><a href="https://github.com/mpg-age-bioinformatics/cluster_first_steps">https://github.com/mpg-age-bioinformatics/cluster_first_steps</a>
+        <br><br>SLURM manual:
+        <br><a href="http://slurm.schedmd.com/man_index.html">http://slurm.schedmd.com/man_index.html</a>
+      </font>
+    </ul>
+</section>
+
+<section id="ENDser">
+  <h1>END</h1>
+      <font size=7>
+        <br><br><a href="mailto:jorge.boucas@age.mpg.de">jorge.boucas@age.mpg.de</a>
+        <br><br><a href="mailto:bioinformatics@age.mpg.de">bioinformatics@age.mpg.de</a>
+        <br><br><a href="http://bioinformatics.age.mpg.de">http://bioinformatics.age.mpg.de</a>
+      </font>
+</section>
