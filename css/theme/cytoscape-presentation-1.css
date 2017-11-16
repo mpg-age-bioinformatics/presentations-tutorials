@@ -12,8 +12,8 @@ section.has-dark-background, section.has-dark-background h1, section.has-dark-ba
 
 .footer {
   position: absolute;
-  left: 2em;
-  bottom: 1em; }
+  left: 0.6em;
+  bottom: 0.6em; }
 
 .footer version {
   vertical-align: 0.95em;
@@ -236,7 +236,7 @@ body {
   display: block;
   padding: 5px;
   overflow: auto;
-  max-height: 400px;
+  max-height: 800px;
   word-wrap: normal; }
 
 .reveal table {
@@ -314,7 +314,7 @@ body {
 .reveal section img {
   background: rgba(255, 255, 255, 0.12);
   border: 0px solid #222;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); }
+  box-shadow: 0 0 0px rgba(0, 0, 0, 0.5); }
 
 .reveal section img.plain {
   border: 0;
