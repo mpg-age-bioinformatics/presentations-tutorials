@@ -1,0 +1,369 @@
+<section id="intro">
+  <h1>RNAseq</h1>
+  <br><highlight>Welcome to the RNAseq tutorial.</highlight>
+  <br>An update and extension of the Tuxedo Suite.
+  <br>
+  <br>
+  At the end of this tutorial you will be able to analyse RNAseq data going
+    from raw data to annotated diferential gene expression tables, enrichment
+    and network analysis.
+    <br>
+    <br>For questions or suggestions  feel free to <a href="mailto:jorge.boucas@age.mpg.de">contact</a> us.</p>
+    <br>
+    <br>
+  <p>
+  <small line-height="0.1">
+    <font size="3" line-height="0.1">
+      <u>References</u>:
+      <br><a href=https://www.nature.com/articles/nprot.2012.016>Trapnell C, <em>Nature Protocols</em>, 2012</a>
+      <br><a href=https://www.nature.com/articles/nprot.2016.095>Pertea N, <em>Nature Protocols</em>, 2016</a>
+      <br><a href=https://www.nature.com/articles/nprot.2008.211>Huang DW, <em>Nature Protocols</em>, 2009</a>
+      <br><a href=https://academic.oup.com/nar/article/37/1/1/1026684>Huang DW, <em>Nucleic Acids Res.</em>, 2009</a>
+      <br><a href=https://academic.oup.com/bioinformatics/article/28/13/1805/235090>Jiao X, <em>Bioinformatics</em>, 2012</a>
+      <br><a href=http://genome.cshlp.org/content/13/11/2498.full>Shannon P, <em>Genome Research</em>, 2003</a>
+    </font>
+    <br>
+  </smal>
+  <smal style="margin-top:20px">
+    <font size="2" >
+    <center><a href=http://bioinformatics.age.mpg.de/presentations_tutorials/presentations/modules/rnaseq-tuxedo-update/index.html?print-pdf#>PDF version</a></center>
+    </font>
+  </small>
+</p>
+  <aside class="notes" data-markdown>
+    No speaker notes
+  </aside>
+</section>
+
+<section id="outline">
+  <h1>Outline</h1>
+  <font size="6" align="left">
+    <ul style="padding-left: 100px;">
+      <li><a href=modules/rnaseq-tuxedo-update/#/prereq>Prerequisites</a>
+      <br><li><a href=modules/rnaseq-tuxedo-update/#/raw_data>Download raw data</a>
+      <br><li><a href=modules/rnaseq-tuxedo-update/#/references>Download reference genome</a>
+      <br><li><a href=modules/rnaseq-tuxedo-update/#/indexing>Index reference genome</a>
+      <br><li><a href=modules/rnaseq-tuxedo-update/#/sample_labeling>GWP: metadata on sample name</a>
+      <br><li><a href=modules/rnaseq-tuxedo-update/#/fastqc>Quality Control</a>
+      <br><li><a href=modules/rnaseq-tuxedo-update/#/mapping>Mapping</a>
+      <br><li><a href=modules/rnaseq-tuxedo-update/#/quantifation>Guided transcriptome assembly and quantification</a>
+      <br><li><a href=modules/rnaseq-tuxedo-update/#/merge>Merging assemblies</a>
+      <br><li><a href=modules/rnaseq-tuxedo-update/#/cuffquant>Post assembly merge quantification</a>
+      <br><li><a href=modules/rnaseq-tuxedo-update/#/cuffdiff>Differential analysis</a>
+      <br><li><a href=modules/rnaseq-tuxedo-update/#/cummeRbund>QC and transcriptome wide plots</a>
+      <br><li><a href=modules/rnaseq-tuxedo-update/#/adiff>Annotation, enrichment and network building</a>
+      <br><li><a href=modules/rnaseq-tuxedo-update/#/automation>SLURM & SHIFTER full script</a>
+    </ul>
+  </div>
+  </font>
+</section>
+
+<section id="prereq">
+  <h1>Prerequisites</h1>
+  <font size="8" align="left">
+    <br>amalia vs local computer
+    <ul>AGEpy, cummeRbund
+    <br>cytoscape and ssh keys
+    <pre><code data-trim>
+      mkdir -p ~/tuxedo-update/raw_data
+    </code></pre>
+    </ul>
+  </font>
+</section>
+
+<section id="raw_data">
+  <h1>Download raw data</h1>
+  <font size="8" align="left">
+    <ul> For this tutorial we will use the data provided with the original
+      Tuxedo Suite paper - <a href=https://www.nature.com/articles/nprot.2012.016>Trapnell C, <em>Nature Protocols</em>, 2012</a>.
+    <br><br>Raw and processed data available through the Gene Expression Omnibus at
+    accession <a href=https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE32038>GSE32038</a>.
+    <br><br>Create a project folder, download and unpack raw data:
+    <pre><code data-trim>
+      mkdir -p ~/tuxedo-update/raw_data
+
+      cd ~/tuxedo-update/raw_data
+
+      wget 'ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE32nnn/GSE32038/\
+      suppl/GSE32038%5Fsimulated%5Ffastq%5Ffiles%2Etar%2Egz'
+
+      tar -zxvf GSE32038_simulated_fastq_files.tar.gz
+    </code></pre>
+    </ul>
+  </font>
+</section>
+
+<section id="references">
+  <h1>Download reference genome</h1>
+  <font size="8" align="left">
+    <br><b>Never, ever, download pre-indexed genome references!</b>
+    <br><br><b>Always download reference genomes and index them!</b>
+    <br><br>Reference genomes can be downloaded from
+    <a href=http://www.ensembl.org/info/data/ftp/index.html>ensembl</a>.
+  </font>
+    </ul>
+  </font>
+</section>
+
+<section id="references2">
+  <h1>Download reference genome</h1>
+  <font size="6" align="left">
+    <ul><br>Download reference genome - DNA (FASTA) - and gene model - Gene sets (GTF) -
+    for Drosophila melanogaster (Fruitfly):
+    <pre><code data-trim>
+      mkdir -p ~/tuxedo-update/references
+
+      cd ~/tuxedo-update/references
+
+      wget 'ftp://ftp.ensembl.org/pub/release-90/fasta/drosophila_melanogaster/dna//\
+      Drosophila_melanogaster.BDGP6.dna.toplevel.fa.gz'
+
+      wget 'ftp://ftp.ensembl.org/pub/release-90/gtf/drosophila_melanogaster//\
+      Drosophila_melanogaster.BDGP6.90.gtf.gz'
+
+      tar -zxvf Drosophila_melanogaster.BDGP6.dna.toplevel.fa.gz
+
+      tar -zxvf Drosophila_melanogaster.BDGP6.90.gtf.gz
+    </code></pre>
+    </ul>
+  </font>
+</section>
+
+<section id="indexing">
+  <h1>Index reference genome</h1>
+  <font size="6" align="left">
+    <ul><br>Index reference genome:
+    <pre><code data-trim>
+      cd ~/tuxedo-update/references
+
+      shifter --image=mpgagebioinformatics/bioinformatics_software:v1.1.0
+      module load hisat
+      hisat2-build Drosophila_melanogaster.BDGP6.dna.toplevel.fa \
+      Drosophila_melanogaster.BDGP6.dna.toplevel.fa
+    </code></pre>
+    </ul>
+  </font>
+</section>
+
+
+<section id="sample_labeling">
+  <h1>GWP: metadata on sample name</h1>
+  <font size="6" align="left">
+    <ul><br>It is a good workking practice to have some metadata in your sample's
+      names so that you can identify them throughout the project.
+      <br><br>So that you can in a easier way re-use your code you can create a
+      string that fits a large variety of projects Eg.:
+
+      <br><br>Sample_serial-Folder-Line-Time_point/day_of_life(day_post_Treament)-treament-REPlicate-READ
+
+      <br><br>S_XXX-F_XXXX-L_XXXXX-XXX-XXXX-REP_X-READ_x.fastq.gz
+
+      <br><br>S_001-F_HaTS-L____N2-__0-____-REP_1-READ_1.fastq.gz
+    </ul>
+  </font>
+</section>
+
+<section id="sample_labeling_2">
+  <h1>GWP: metadata on sample name</h1>
+  <font size="6" align="left">
+    <ul><br>Apply it to your data:
+    <pre><code data-trim>
+      cd ~/tuxedo-update/raw_data
+
+      ln -s GSM794483_C1_R1_1.fq.gz S_001-F_TuUp-L____C1-___-____-REP_1-READ_1.fastq.gz
+      ln -s GSM794483_C1_R1_2.fq.gz S_001-F_TuUp-L____C1-___-____-REP_1-READ_2.fastq.gz
+      ln -s GSM794484_C1_R2_1.fq.gz S_002-F_TuUp-L____C1-___-____-REP_2-READ_1.fastq.gz
+      ln -s GSM794484_C1_R2_2.fq.gz S_002-F_TuUp-L____C1-___-____-REP_2-READ_2.fastq.gz
+      ln -s GSM794485_C1_R3_1.fq.gz S_003-F_TuUp-L____C1-___-____-REP_3-READ_1.fastq.gz
+      ln -s GSM794485_C1_R3_2.fq.gz S_003-F_TuUp-L____C1-___-____-REP_3-READ_2.fastq.gz
+
+      ln -s GSM794486_C2_R1_1.fq.gz S_004-F_TuUp-L____C2-___-____-REP_1-READ_1.fastq.gz
+      ln -s GSM794486_C2_R1_2.fq.gz S_004-F_TuUp-L____C2-___-____-REP_1-READ_2.fastq.gz
+      ln -s GSM794487_C2_R2_1.fq.gz S_005-F_TuUp-L____C2-___-____-REP_2-READ_1.fastq.gz
+      ln -s GSM794487_C2_R2_2.fq.gz S_005-F_TuUp-L____C2-___-____-REP_2-READ_2.fastq.gz
+      ln -s GSM794488_C2_R3_1.fq.gz S_006-F_TuUp-L____C2-___-____-REP_3-READ_1.fastq.gz
+      ln -s GSM794488_C2_R3_2.fq.gz S_006-F_TuUp-L____C2-___-____-REP_3-READ_2.fastq.gz
+    </code></pre>
+    </ul>
+  </font>
+</section>
+
+<section id="fastqc">
+  <h1>Quality Control</h1>
+  <font size="8" align="left">
+    <ul><br>We will use fastqc to quality control our raw data:
+    <pre><code data-trim>
+      mkdir ~/tuxedo-update/fastqc_output
+
+      cd ~/tuxedo-update/raw_data
+
+      for file in $(ls S_*.fastq.gz);
+        do fastqc -o ../fastqc_output ${file}
+      done
+    </code></pre>
+    More information on <em>fastqc</em>'s output can be found <a href=https://www.bioinformatics.babraham.ac.uk/projects/fastqc/>here</a>.
+    </ul>
+  </font>
+</section>
+
+<section id="mapping">
+  <h1>Mapping</h1>
+  <font size="8" align="left">
+    <pre><code data-trim>
+      mkdir ~/tuxedo-update/hisat2_output
+
+      cd ~/tuxedo-update/raw_data
+
+      R="../references/Drosophila_melanogaster.BDGP6.dna.toplevel.fa"
+
+      for file in $(ls S_*READ_1.fastq.gz);
+        do hisat2 -p 8 --dta-cufflinks \
+        --met-file ../hisat2_output/${file%-READ_1.fastq.gz}.stats \
+        -x ${R} -1 ${file} -2 ${file%1.fastq.gz}2.fastq.gz
+      done
+    </code></pre>
+    Note: this is an unstranded dataset.
+    </ul>
+  </font>
+</section>
+
+<section id="mapping2">
+  <h1>Mapping</h1>
+  <font size="8" align="left">
+    <ul>Compress and sort alignments:
+    <pre><code data-trim>
+      cd ~/tuxedo-update/hisat2_output
+
+      for file in $(ls *.sam);
+        do samtools view -@ 18 -bhS -F 4 ${file} | \
+        samtools sort -@ 18 -o ${file%.sam}.bam -
+      done
+    </code></pre>
+    </ul>
+  </font>
+</section>
+
+<section id="quantification">
+  <h1>Guided transcriptome assembly and quantification</h1>
+  <font size="8" align="left">
+    <pre><code data-trim>
+      mkdir ~/tuxedo-update/stringtie_output
+
+      cd ~/tuxedo-update/hisat2_output
+
+      for file in $(ls *.sam);
+        do stringtie ${file::(-16)}.bam \
+        -o ../stringtie_output/${file%.sam}.gtf \
+        -p 18 -G ${ori_GTF} -f 0.99 \
+        -C ../stringtie_output/${file%.sam}_full_cov.gtf \
+        -b ../stringtie_output/${file%.sam}
+      done
+    </code></pre>
+  </font>
+</section>
+
+<section id="merge">
+  <h1>Merging assemblies</h1>
+  <font size="8" align="left">
+    <pre><code data-trim>
+      mkdir ~/tuxedo-update/cuffmerge_output
+
+      cd ~/tuxedo-update/stringtie_output
+
+      for file in $(ls *.gtf);
+        do readlink -f ${file} >> assemblies.txt
+      done
+
+      cuffmerge -o ../cuffmerge_output --min-isoform-fraction 1.0 \
+      -g ../references/Drosophila_melanogaster.BDGP6.90.gtf \
+      -s ../references/Drosophila_melanogaster.BDGP6.dna.toplevel.fa \
+      assemblies.txt
+
+    </code></pre>
+  </font>
+</section>
+
+<section id="cuffquant">
+  <h1>Post assembly merge quantification</h1>
+  <font size="8" align="left">
+    <pre><code data-trim>
+      mkdir ~/tuxedo-update/cuffquant_output
+
+      cd ~/tuxedo-update/hisat2_output
+
+      for file in $(ls *.bam);
+        do cuffquant --library-type fr-unstranded \
+        -o ../cuffquant_output/${file%.bam} \
+        ../cuffmerge_output/merged.gtf \
+        ${file}
+      done
+    </code></pre>
+  </font>
+</section>
+
+<section id="cuffdiff">
+  <h1>Differential analysis</h1>
+  <font size="8" align="left">
+    <pre><code data-trim>
+      mkdir ~/tuxedo-update/cuffdiff_output
+
+      cd ~/tuxedo-update/cuffquant_output
+
+      cuffdiff --library-type fr-unstranded \
+      -L C1,C2 \
+      -o ../cuffdiff_output \
+      --dispersion-method per-condition \
+      ../cuffmerge_output/merged.gtf \
+      S_001-F_TuUp-L____C1-___-____-REP_1/abundances.cxb,\
+      S_002-F_TuUp-L____C1-___-____-REP_2/abundances.cxb,\
+      S_003-F_TuUp-L____C1-___-____-REP_3/abundances.cxb \
+      S_004-F_TuUp-L____C2-___-____-REP_1/abundances.cxb,\
+      S_005-F_TuUp-L____C2-___-____-REP_2/abundances.cxb,\
+      S_006-F_TuUp-L____C2-___-____-REP_3/abundances.cxb
+    </code></pre>
+  </font>
+</section>
+
+<section id="cummeRbund">
+  <h1>QC and transcriptome wide plots</h1>
+  <font size="8" align="left">
+    CummeRbund - Exploration, analysis and visualization of Cufflinks
+    high-throughput RNA-Seq data.
+    <br><br>It's an R package that is designed
+    to aid and simplify the task of analyzing Cufflinks RNA-Seq output.
+    <br><br>You can check the manual <a href=http://compbio.mit.edu/cummeRbund/>here</a>.
+    <br><br>An example of an R script performing most of cummeRbund's calls can be
+    found <a href=https://github.com/mpg-age-bioinformatics/htseq-tools/blob/master/QC.R>here</a>.
+  </font>
+</section>
+
+<section id="adiff">
+  <h1>Annotation, enrichment and network building</h1>
+  <font size="8" align="left">
+    <pre><code data-trim>
+      mkdir ~/tuxedo-update/adiff_output
+
+      cd ~/tuxedo-update
+
+      aDiff -D -i cuffdiff_output -o adiff_output \
+      -G references/Drosophila_melanogaster.BDGP6.90.gtf \
+      -C cuffmerge_output/merged.gtf \
+      --dataset dmelanogaster_gene_ensembl \
+      --filter flybase_gene_id \
+      --outputBiotypes 'flybase_gene_id gene_biotype' \
+      --outputGoterms 'flybase_gene_id go_id name_1006' \
+      --DAVIDid FLYBASE_GENE_ID \
+      --DAVIDuser &ltRegistered.Email@david.com&gt \
+      --organismtag DMEL \
+      --species 'drosophila melanogaster' \
+      --cytoscape_host localhost
+    </code></pre>
+  </font>
+</section>
+
+<section id="automation">
+  <h1>SLURM & SHIFTER full script</h1>
+  <font size="8" align="left">
+    sdfsdf
+  </font>
+</section>

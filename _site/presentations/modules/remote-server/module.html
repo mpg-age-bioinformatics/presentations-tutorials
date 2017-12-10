@@ -19,17 +19,15 @@
   <h1>Outline</h1>
   <font size="6" align="left">
       <ul style="padding-left: 100px;">
-        <li>What is the shell?
-        <br><li>Connecting to a remote server
-        <br><li>Copying files to/from a remote server
-        <br><li>The modules system
-        <br><li>Shifter/Docker for HPC
-        <br><li>Installing software without `su` access
-        <br><li>Installing R packages
-        <br><li>Installing python packages
-        <br><li>Shortcut: Tab Completion
-        <br><li>Installing perl packages
-        <br><li>SLURM
+        <br><li><a href=modules/remote-server/#/connecting>Connecting to a remote server</a>
+        <br><li><a href=modules/remote-server/#/scp>Copying files to/from a remote server</a>
+        <br><li><a href=modules/remote-server/#/modules>The modules system</a>
+        <br><li><a href=modules/remote-server/#/docker>Shifter/Docker for HPC</a>
+        <br><li><a href=modules/remote-server/#/avail>Installing software without `su` access</a>
+        <br><li><a href=modules/remote-server/#/r>Installing R packages</a>
+        <br><li><a href=modules/remote-server/#/python>Installing python packages</a>
+        <br><li><a href=modules/remote-server/#/perl>Installing perl packages</a>
+        <br><li><a href=modules/remote-server/#/amalia>SLURM</a>
       </ul>
   </font>
 </section>
@@ -89,12 +87,12 @@
         For speed use `-o Cipher=arcfour`.
         <br>rsync to a remote server
         <pre><code data-trim>
-          rsync –rtvh –e "ssh –c arcfour" source_folder \
+          rsync -rtvh -e "ssh -c arcfour" source_folder \
           UName@ServerAddress:destination
         </code></pre>
         Not all servers will have the less costly cipher arcfour
         encryption algorithm and therefore you can remove the whole
-        `-e "ssh –c arcfour"` block.
+        `-e "ssh -c arcfour"` block.
     </ul>
   </font>
 </section>
@@ -506,7 +504,7 @@ proc ModulesHelp { } {
 </section>
 
 <section id="install">
-  <h1>Installing software without `su` access</h1>
+  <h1>Installing software<br>without `su` access</h1>
     <ul>
       <font size=6>
         Several examples can be obtained from:
@@ -518,14 +516,14 @@ proc ModulesHelp { } {
         </div>
       <ul>
         <pre><code data-trim>
-          mkdir –p ~/my_software/sources ~/my_software/software ~/my_software/logs ~/my_software/modules
+          mkdir -p ~/my_software/sources ~/my_software/software ~/my_software/logs ~/my_software/modules
         </code></pre>
       </font>
     </ul>
 </section>
 
 <section id="install2">
-  <h1>Installing software without `su` access</h1>
+  <h1>Installing software<br>without `su` access</h1>
     <ul>
       <font size=7>
         Download and edit the script for automatic generation of module files:
@@ -546,7 +544,7 @@ proc ModulesHelp { } {
 </section>
 
 <section id="install3">
-  <h1>Installing software without `su` access</h1>
+  <h1>Installing software<br>without `su` access</h1>
     <ul>
       <font size=7>
         <pre><code data-trim>
@@ -555,9 +553,9 @@ proc ModulesHelp { } {
            tar -zxvf pigz-2.3.4.tar.gz
            cd pigz-2.3.4
            make
-           mkdir –p ~/my_software/software/pigz/2.3.4/bin
+           mkdir -p ~/my_software/software/pigz/2.3.4/bin
            cp pigz unpigz ~/my_software/software/pigz/2.3.4/bin
-           ~/newmod.sh –s pigz –p ~/my_software/modules –v 2.3.4 –d 2.3.4
+           ~/newmod.sh -s pigz -p ~/my_software/modules -v 2.3.4 -d 2.3.4
         </code></pre>
         Test it
         <pre><code data-trim>
@@ -571,7 +569,7 @@ proc ModulesHelp { } {
 </section>
 
 <section id="install4">
-  <h1>Installing software without `su` access</h1>
+  <h1>Installing software<br>without `su` access</h1>
     <ul>
       <font size=7>
         <pre><code data-trim>
@@ -580,18 +578,18 @@ proc ModulesHelp { } {
            tar -zxvf zlib-1.2.11.tar.gz
            cd zlib-1.2.11
            make
-           mkdir –p ~/my_software/software/libz/1.2.11
-           ./configure –prefix=~/my_software/software/libz/1.2.11
+           mkdir -p ~/my_software/software/libz/1.2.11
+           ./configure --prefix=~/my_software/software/libz/1.2.11
            make
            make install
-           ~/newmod.sh –s libz –p ~/my_software/modules –v 1.2.11 –d 1.2.11
+           ~/newmod.sh -s libz -p ~/my_software/modules -v 1.2.11 -d 1.2.11
         </code></pre>
       </font>
     </ul>
 </section>
 
 <section id="install5">
-  <h1>Installing software without `su` access</h1>
+  <h1>Installing software<br>without `su` access</h1>
     <ul>
       <font size=7>
         <pre><code data-trim data-noescape>
@@ -601,11 +599,11 @@ proc ModulesHelp { } {
            tar -zxvf zlib-1.2.11.tar.gz
            cd zlib-1.2.11
            make
-           mkdir –p ~/my_software/software/libz/1.2.11
-           ./configure –prefix=~/my_software/software/libz/1.2.11
+           mkdir -p ~/my_software/software/libz/1.2.11
+           ./configure --prefix=~/my_software/software/libz/1.2.11
            make
            make install
-           ~/newmod.sh –s libz –p ~/my_software/modules –v 1.2.11 –d 1.2.11</mark>
+           ~/newmod.sh -s libz -p ~/my_software/modules -v 1.2.11 -d 1.2.11</mark>
            " > ~/my_software/logs/libz-1.2.11.sh
            chmod +x ~/my_software/logs/libz-1.2.11.sh
            ~/my_software/logs/libz-1.2.11.sh 2>&1 | tee \
@@ -616,7 +614,7 @@ proc ModulesHelp { } {
 </section>
 
 <section id="install6">
-  <h1>Installing software without `su` access</h1>
+  <h1>Installing software<br>without `su` access</h1>
     <ul>
       <font size=6>
         <pre><code data-trim data-noescape>
