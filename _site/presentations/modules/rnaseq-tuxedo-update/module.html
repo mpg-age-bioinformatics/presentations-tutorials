@@ -1,28 +1,25 @@
 <section id="intro">
   <h1>RNAseq</h1>
-  <br><highlight>Welcome to the RNAseq tutorial.</highlight>
+  <highlight>Welcome to the RNAseq tutorial.</highlight>
   <br>An update and extension of the Tuxedo Suite.
-  <br>
-  <br>
+  <br><br>
   At the end of this tutorial you will be able to analyse RNAseq data going
     from raw data to annotated diferential gene expression tables, enrichment
     and network analysis.
     <br>
     <br>For questions or suggestions  feel free to <a href="mailto:jorge.boucas@age.mpg.de">contact</a> us.</p>
-    <br>
-    <br>
   <p>
+    <br>  <br>
   <small line-height="0.1">
     <font size="3" line-height="0.1">
       <u>References</u>:
-      <br><a href=https://www.nature.com/articles/nprot.2012.016>Trapnell C, <em>Nature Protocols</em>, 2012</a>
-      <br><a href=https://www.nature.com/articles/nprot.2016.095>Pertea N, <em>Nature Protocols</em>, 2016</a>
-      <br><a href=https://www.nature.com/articles/nprot.2008.211>Huang DW, <em>Nature Protocols</em>, 2009</a>
-      <br><a href=https://academic.oup.com/nar/article/37/1/1/1026684>Huang DW, <em>Nucleic Acids Res.</em>, 2009</a>
-      <br><a href=https://academic.oup.com/bioinformatics/article/28/13/1805/235090>Jiao X, <em>Bioinformatics</em>, 2012</a>
-      <br><a href=http://genome.cshlp.org/content/13/11/2498.full>Shannon P, <em>Genome Research</em>, 2003</a>
+      <br><a href=https://www.nature.com/articles/nprot.2012.016>Trapnell C, <em>Nature Protocols</em>, 2012</a>;
+      <a href=https://www.nature.com/articles/nprot.2016.095>Pertea N, <em>Nature Protocols</em>, 2016</a>;
+      <a href=https://www.nature.com/articles/nprot.2008.211>Huang DW, <em>Nature Protocols</em>, 2009</a>;
+      <a href=https://academic.oup.com/nar/article/37/1/1/1026684>Huang DW, <em>Nucleic Acids Res.</em>, 2009</a>;
+      <a href=https://academic.oup.com/bioinformatics/article/28/13/1805/235090>Jiao X, <em>Bioinformatics</em>, 2012</a>;
+      <a href=http://genome.cshlp.org/content/13/11/2498.full>Shannon P, <em>Genome Research</em>, 2003</a>.
     </font>
-    <br>
   </smal>
   <smal style="margin-top:20px">
     <font size="2" >
@@ -60,20 +57,56 @@
 
 <section id="prereq">
   <h1>Prerequisites</h1>
-  <font size="8" align="left">
-    <br>amalia vs local computer
-    <ul>AGEpy, cummeRbund
-    <br>cytoscape and ssh keys
+  <font size="6" align="left">
+    <br>fastqc
+    <br>hisat2
+    <br>stringtie
+    <br>samtools
+    <br>cufflinks
+    <br>cummeRbund (R packaged)
+    <br>AGEpy (python package)
+    <br><br>All software is available on our <a href=https://store.docker.com/community/images/mpgagebioinformatics/bioinformatics_software>docker image</a>.
+    For running the image on docker follow the instructions <a href=https://github.com/mpg-age-bioinformatics/software_docker#software-container>here</a>.
+    For running the image on shifter (HPC) simply:<br>
+  </font>
+  <font size="6" align="left">
     <pre><code data-trim>
-      mkdir -p ~/tuxedo-update/raw_data
+      module load shifter
+      shifter --image=mpgagebioinformatics/bioinformatics_software:v1.1.1
     </code></pre>
+    </ul>
+  </font>
+</section>
+
+<section id="prereq2">
+  <h1>Prerequisites</h1>
+  <font size="6" align="left">
+    <ul>Install AGEpy
+      <pre><code data-trim>
+        module load python rlang
+        cd ~/
+        git clone https://github.com/mpg-age-bioinformatics/AGEpy.git
+        cd AGEpy
+        pip install ../AGEpy --user
+      </code></pre>
+
+      <br>Install cummeRbund
+      <pre><code data-trim>
+        module load rlang/3.4.3
+        R
+      </code></pre>
+      inside R:
+      <pre><code data-trim>
+        source("https://bioconductor.org/biocLite.R")
+        biocLite("cummeRbund")
+      </code></pre>
     </ul>
   </font>
 </section>
 
 <section id="raw_data">
   <h1>Download raw data</h1>
-  <font size="8" align="left">
+  <font size="6" align="left">
     <ul> For this tutorial we will use the data provided with the original
       Tuxedo Suite paper - <a href=https://www.nature.com/articles/nprot.2012.016>Trapnell C, <em>Nature Protocols</em>, 2012</a>.
     <br><br>Raw and processed data available through the Gene Expression Omnibus at
@@ -95,7 +128,7 @@
 
 <section id="references">
   <h1>Download reference genome</h1>
-  <font size="8" align="left">
+  <font size="6" align="left">
     <br><b>Never, ever, download pre-indexed genome references!</b>
     <br><br><b>Always download reference genomes and index them!</b>
     <br><br>Reference genomes can be downloaded from
@@ -121,9 +154,9 @@
       wget 'ftp://ftp.ensembl.org/pub/release-90/gtf/drosophila_melanogaster//\
       Drosophila_melanogaster.BDGP6.90.gtf.gz'
 
-      tar -zxvf Drosophila_melanogaster.BDGP6.dna.toplevel.fa.gz
+      unpigz Drosophila_melanogaster.BDGP6.dna.toplevel.fa.gz
 
-      tar -zxvf Drosophila_melanogaster.BDGP6.90.gtf.gz
+      unpigz Drosophila_melanogaster.BDGP6.90.gtf.gz
     </code></pre>
     </ul>
   </font>
@@ -136,8 +169,6 @@
     <pre><code data-trim>
       cd ~/tuxedo-update/references
 
-      shifter --image=mpgagebioinformatics/bioinformatics_software:v1.1.0
-      module load hisat
       hisat2-build Drosophila_melanogaster.BDGP6.dna.toplevel.fa \
       Drosophila_melanogaster.BDGP6.dna.toplevel.fa
     </code></pre>
@@ -190,7 +221,7 @@
 
 <section id="fastqc">
   <h1>Quality Control</h1>
-  <font size="8" align="left">
+  <font size="6" align="left">
     <ul><br>We will use fastqc to quality control our raw data:
     <pre><code data-trim>
       mkdir ~/tuxedo-update/fastqc_output
@@ -208,7 +239,7 @@
 
 <section id="mapping">
   <h1>Mapping</h1>
-  <font size="8" align="left">
+  <font size="6" align="left">
     <pre><code data-trim>
       mkdir ~/tuxedo-update/hisat2_output
 
@@ -219,7 +250,8 @@
       for file in $(ls S_*READ_1.fastq.gz);
         do hisat2 -p 8 --dta-cufflinks \
         --met-file ../hisat2_output/${file%-READ_1.fastq.gz}.stats \
-        -x ${R} -1 ${file} -2 ${file%1.fastq.gz}2.fastq.gz
+        -x ${R} -1 ${file} -2 ${file%1.fastq.gz}2.fastq.gz \
+        -S ../hisat2_output/${file%-READ_1.fastq.gz}.sam
       done
     </code></pre>
     Note: this is an unstranded dataset.
@@ -229,7 +261,7 @@
 
 <section id="mapping2">
   <h1>Mapping</h1>
-  <font size="8" align="left">
+  <font size="6" align="left">
     <ul>Compress and sort alignments:
     <pre><code data-trim>
       cd ~/tuxedo-update/hisat2_output
@@ -245,7 +277,7 @@
 
 <section id="quantification">
   <h1>Guided transcriptome assembly and quantification</h1>
-  <font size="8" align="left">
+  <font size="6" align="left">
     <pre><code data-trim>
       mkdir ~/tuxedo-update/stringtie_output
 
@@ -254,7 +286,8 @@
       for file in $(ls *.sam);
         do stringtie ${file::(-16)}.bam \
         -o ../stringtie_output/${file%.sam}.gtf \
-        -p 18 -G ${ori_GTF} -f 0.99 \
+        -p 18 -f 0.99 \
+        -G ../references/Drosophila_melanogaster.BDGP6.90.gtf \
         -C ../stringtie_output/${file%.sam}_full_cov.gtf \
         -b ../stringtie_output/${file%.sam}
       done
@@ -262,15 +295,34 @@
   </font>
 </section>
 
+<section id="bug">
+  <h1>bug</h1>
+  <font size="6" align="left">
+    <ul>In this example a bug generates the transcript FBtr0346424 twice in
+    the file S_002-F_TuUp-L____C1-___-____-REP_2.gtf.<br>We remove this
+    transcript from this sample gene model. The transcript is present in the
+    the other samples and will therefore be present on the final gene model
+    generated by cuffmerge.
+    <pre><code data-trim>
+      cd ~/tuxedo-update/stringtie_output
+
+      cat S_002-F_TuUp-L____C1-___-____-REP_2.gtf | \
+      grep -v FBtr0346424 > S_002-F_TuUp-L____C1-___-____-REP_2.gtf_
+
+      mv S_002-F_TuUp-L____C1-___-____-REP_2.gtf_ S_002-F_TuUp-L____C1-___-____-REP_2.gtf
+    </code></pre>
+  </font>
+</section>
+
 <section id="merge">
   <h1>Merging assemblies</h1>
-  <font size="8" align="left">
+  <font size="6" align="left">
     <pre><code data-trim>
       mkdir ~/tuxedo-update/cuffmerge_output
 
       cd ~/tuxedo-update/stringtie_output
 
-      for file in $(ls *.gtf);
+      for file in $(ls *.gtf | grep -v _full_cov);
         do readlink -f ${file} >> assemblies.txt
       done
 
@@ -284,8 +336,8 @@
 </section>
 
 <section id="cuffquant">
-  <h1>Post assembly merge quantification</h1>
-  <font size="8" align="left">
+  <h1>Post assembly merge and quantification</h1>
+  <font size="6" align="left">
     <pre><code data-trim>
       mkdir ~/tuxedo-update/cuffquant_output
 
@@ -303,7 +355,7 @@
 
 <section id="cuffdiff">
   <h1>Differential analysis</h1>
-  <font size="8" align="left">
+  <font size="6" align="left">
     <pre><code data-trim>
       mkdir ~/tuxedo-update/cuffdiff_output
 
@@ -326,7 +378,7 @@
 
 <section id="cummeRbund">
   <h1>QC and transcriptome wide plots</h1>
-  <font size="8" align="left">
+  <font size="6" align="left">
     CummeRbund - Exploration, analysis and visualization of Cufflinks
     high-throughput RNA-Seq data.
     <br><br>It's an R package that is designed
@@ -339,7 +391,7 @@
 
 <section id="adiff">
   <h1>Annotation, enrichment and network building</h1>
-  <font size="8" align="left">
+  <font size="6" align="left">
     <pre><code data-trim>
       mkdir ~/tuxedo-update/adiff_output
 
@@ -363,7 +415,12 @@
 
 <section id="automation">
   <h1>SLURM & SHIFTER full script</h1>
-  <font size="8" align="left">
-    sdfsdf
+  <font size="6" align="left">
+    <br>A full automated script can be downloaded for running the analysis or to be
+    used as a reference to debug your own code:
+    <br><br><a href=https://github.com/mpg-age-bioinformatics/presentations_tutorials/blob/gh-pages/presentations/modules/rnaseq-tuxedo-update/tuxedo.script.sh>
+      View code</a>
+    <br><br><a href=https://raw.githubusercontent.com/mpg-age-bioinformatics/presentations_tutorials/gh-pages/presentations/modules/rnaseq-tuxedo-update/tuxedo.script.sh>
+      Download code</a>
   </font>
 </section>
