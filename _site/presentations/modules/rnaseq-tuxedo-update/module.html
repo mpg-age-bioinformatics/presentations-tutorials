@@ -36,7 +36,8 @@
   <h1>Outline</h1>
   <font size="6" align="left">
     <ul style="padding-left: 100px;">
-      <li><a href=modules/rnaseq-tuxedo-update/#/prereq>Prerequisites</a>
+      <li><a href=modules/rnaseq-tuxedo-update/#/overview>Overview</a>
+      <br><li><a href=modules/rnaseq-tuxedo-update/#/prereq>Prerequisites</a>
       <br><li><a href=modules/rnaseq-tuxedo-update/#/raw_data>Download raw data</a>
       <br><li><a href=modules/rnaseq-tuxedo-update/#/references>Download reference genome</a>
       <br><li><a href=modules/rnaseq-tuxedo-update/#/indexing>Index reference genome</a>
@@ -53,6 +54,12 @@
     </ul>
   </div>
   </font>
+</section>
+
+<section id="overview">
+  <div>
+      <img src="modules/rnaseq-tuxedo-update/tuxedo_workflow.png" width="300" align="center">
+  </div>
 </section>
 
 <section id="prereq">
@@ -83,7 +90,7 @@
   <font size="6" align="left">
     <ul>Install AGEpy
       <pre><code data-trim>
-        module load python rlang
+        module load python
         cd ~/
         git clone https://github.com/mpg-age-bioinformatics/AGEpy.git
         cd AGEpy
