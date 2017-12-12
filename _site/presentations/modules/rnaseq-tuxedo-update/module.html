@@ -291,7 +291,7 @@
       cd ~/tuxedo-update/hisat2_output
 
       for file in $(ls *.sam);
-        do stringtie ${file::(-16)}.bam \
+        do stringtie ${file%.sam}.bam \
         -o ../stringtie_output/${file%.sam}.gtf \
         -p 8 -f 0.99 \
         -G ../references/Drosophila_melanogaster.BDGP6.90.gtf \
