@@ -267,8 +267,8 @@
       cd ~/tuxedo-update/hisat2_output
 
       for file in $(ls *.sam);
-        do samtools view -@ 18 -bhS -F 4 ${file} | \
-        samtools sort -@ 18 -o ${file%.sam}.bam -
+        do samtools view -@ 8 -bhS -F 4 ${file} | \
+        samtools sort -@ 8 -o ${file%.sam}.bam -
       done
     </code></pre>
     </ul>
@@ -286,7 +286,7 @@
       for file in $(ls *.sam);
         do stringtie ${file::(-16)}.bam \
         -o ../stringtie_output/${file%.sam}.gtf \
-        -p 18 -f 0.99 \
+        -p 8 -f 0.99 \
         -G ../references/Drosophila_melanogaster.BDGP6.90.gtf \
         -C ../stringtie_output/${file%.sam}_full_cov.gtf \
         -b ../stringtie_output/${file%.sam}
@@ -344,7 +344,7 @@
       cd ~/tuxedo-update/hisat2_output
 
       for file in $(ls *.bam);
-        do cuffquant --library-type fr-unstranded \
+        do cuffquant -p 8 --library-type fr-unstranded \
         -o ../cuffquant_output/${file%.bam} \
         ../cuffmerge_output/merged.gtf \
         ${file}
@@ -361,7 +361,7 @@
 
       cd ~/tuxedo-update/cuffquant_output
 
-      cuffdiff --library-type fr-unstranded \
+      cuffdiff -p 8 --library-type fr-unstranded \
       -L C1,C2 \
       -o ../cuffdiff_output \
       --dispersion-method per-condition \
@@ -408,7 +408,8 @@
       --DAVIDuser &ltRegistered.Email@david.com&gt \
       --organismtag DMEL \
       --species 'drosophila melanogaster' \
-      --cytoscape_host localhost
+      --cytoscape_host localhost \
+      --cytoscape_port 1234
     </code></pre>
   </font>
 </section>
@@ -416,7 +417,7 @@
 <section id="automation">
   <h1>SLURM & SHIFTER full script</h1>
   <font size="6" align="left">
-    <br>A full automated script can be downloaded for running the analysis or to be
+    <br>A full automated script can be downloaded for running the analysis on our local HPC server or to be
     used as a reference to debug your own code:
     <br><br><a href=https://github.com/mpg-age-bioinformatics/presentations_tutorials/blob/gh-pages/presentations/modules/rnaseq-tuxedo-update/tuxedo.script.sh>
       View code</a>
