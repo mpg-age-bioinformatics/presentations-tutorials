@@ -43,7 +43,7 @@
       </code></pre>
       With X forwarding:
       <pre><code data-trim>
-        ssh –X JBoucas@amalia.age.mpg.de
+        ssh -X JBoucas@amalia.age.mpg.de
       </code></pre>
     </ul>
   </font>
@@ -177,15 +177,13 @@
         <pre><code data-trim>
           shifterls
         </code></pre>
-        get an interactive shell on ubuntu and check
+        get an interactive shell and check
         that you are in the intended image
+        using the Bioinformatics image
         <pre><code data-trim>
-          shifter --image=ubuntu:15.10 bash -login
-          cat /etc/lsb-release
-        </code></pre>
-        use the Bioinformatics image
-        <pre><code data-trim>
-          shifter --image=mpgagebioinformatics/bioinformatics_software:v1.0.0
+          cat /etc/*-release
+          shifter --image=hub.age.mpg.de/bioinformatics/software:v1.1.5
+          cat /etc/*-release
         </code></pre>
         run a script inside an image
         <pre><code data-trim>
@@ -201,7 +199,7 @@
       <font size=6>
         load respective module
         <pre><code data-trim>
-          module load shifter
+          module load shifter/latest
         </code></pre>
         list available images
         <pre><code data-trim>
@@ -213,7 +211,7 @@
         </code></pre>
         login to our software image
         <pre><code data-trim>
-          shifter --image=mpgagebioinformatics/bioinformatics_software:v1.1.0
+          shifter --image=hub.age.mpg.de/bioinformatics/software:v1.1.5
           pwd
           module avail
           module load rlang
@@ -249,7 +247,7 @@
         <pre><code data-trim>
           chmod +x test.shifter.sh
           shifter \
-            --image=mpgagebioinformatics/bioinformatics_software:v1.0.1 \
+            --image=hub.age.mpg.de/bioinformatics/software:v1.1.5 \
             ./test.sh
         </code></pre>
       </font>
@@ -531,7 +529,8 @@ proc ModulesHelp { } {
            cd ~/
            wget https://raw.githubusercontent.com/mpg-age-bioinformatics/\
            draco_pipelines/master/software/newmod.sh
-           sed -i 's/\/u\/jboucas\/modules/~\/my_software/g' newmod.sh
+           sed 's/\/u\/jboucas\/modules/~\/my_software/g' newmod.sh > t.sh1
+           mv t.sh1 newmod.sh
            chmod +x newmod.sh
         </code></pre>
         Add the `~/my_software/modules` to the MODULEPATH:
@@ -549,19 +548,19 @@ proc ModulesHelp { } {
       <font size=7>
         <pre><code data-trim>
            cd ~/my_software/sources
-           wget http://zlib.net/pigz/pigz-2.3.4.tar.gz
-           tar -zxvf pigz-2.3.4.tar.gz
-           cd pigz-2.3.4
+           wget http://zlib.net/pigz/pigz-2.4.tar.gz
+           tar -zxvf pigz-2.4.tar.gz
+           cd pigz-2.4
            make
-           mkdir -p ~/my_software/software/pigz/2.3.4/bin
-           cp pigz unpigz ~/my_software/software/pigz/2.3.4/bin
-           ~/newmod.sh -s pigz -p ~/my_software/modules -v 2.3.4 -d 2.3.4
+           mkdir -p ~/my_software/software/pigz/2.4/bin
+           cp pigz unpigz ~/my_software/software/pigz/2.4/bin
+           ~/newmod.sh -s pigz -p ~/my_software/modules -v 2.4 -d 2.4
         </code></pre>
         Test it
         <pre><code data-trim>
          module avail
-         module show pigz/2.3.4
-         module load pigz/2.3.4
+         module show pigz/2.4
+         module load pigz/2.4
          which pigz
         </code></pre>
       </font>
@@ -808,44 +807,158 @@ fi
 
 <section id="slurm13">
   <h1>SLURM with the modules system</h1>
-  <div>
-      <img src="modules/remote-server/cluster13.png" width="900" align="center">
-  </div>
+  <ul>
+    <font size=6>
+      <pre><code data-trim data-noescape>
+        #!/bin/bash
+        #SBATCH --cpus-per-task=18
+        #SBATCH --mem=15gb
+        #SBATCH --time=5-24
+        #SBATCH -p blade
+        #SBATCH -o slurm_logs/bwa_1.out
+
+        <mark>module load bwa</mark>
+        cd ~/project/raw_data
+        bwa mem -T 18 sample1.fastq
+        exit
+      </code></pre>
+    </font>
+  </ul>
 </section>
 
 <section id="slurm14">
   <h1>SLURM with shifter<br>and the modules system</h1>
-  <div>
-      <img src="modules/remote-server/cluster14.png" width="900" align="center">
-  </div>
+  <ul>
+    <font size=6>
+      <pre><code data-trim data-noescape>
+        #!/bin/bash
+        #SBATCH --cpus-per-task=18
+        #SBATCH --mem=15gb
+        #SBATCH --time=5-24
+        #SBATCH -p blade
+        #SBATCH -o slurm_logs/bwa_1.out
+
+        <mark>shifter --image=hub.age.mpg.de/bioinformatics/software:v1.1.5 << SHI</mark>
+        <mark>#!/bin/bash</mark>
+        <mark>source ~/.bashrc</mark>
+        <mark>module load bwa</mark>
+        cd ~/project/raw_data
+        bwa mem -T 18 sample1.fastq
+        exit
+        <mark>SHI</mark>
+      </code></pre>
+    </font>
+  </ul>
 </section>
 
 <section id="slurm15">
   <h1>SLURM: iterating jobs over files</h1>
-  <div>
-      <img src="modules/remote-server/cluster15.png" width="900" align="center">
-  </div>
+  <ul>
+    <font size=6>
+      <pre><code data-trim data-noescape>
+        #!/bin/bash
+        cd ~/project/raw_data                          # got to a folder containing files
+
+        for f in $(ls *.fastq); do echo "<mark>#!/bin/bash</mark>   # for each file, echo a script
+        <mark>cd ~/project/raw_data</mark>                          # that goes to the folder
+        <mark>bwa mem -T 18 ${f}</mark>                             # executes job on file and
+        <mark>rm ~/project/tmp/${f}.sh</mark>                       # once completed removes
+        " > ~/project/tmp/${f}.sh                      # temporary script
+
+        chmod 755 ~/project/tmp/${f}.sh
+        rm ~/project/slurm_logs/${f}.*.out             # removes pre-existing logs
+
+        sbatch --cpus-per-task=18 --mem=15 \           # start batch job
+        --time=5-24 -p blade \
+        -o ~/project/slurm_logs/${f}.%j.out \          # keeps log with job number
+        ~/project/tmp/${f}.sh
+      </code></pre>
+    </font>
+  </ul>
 </section>
 
 <section id="slurm16">
   <h1>SLURM: iterating jobs over files</h1>
-  <div>
-      <img src="modules/remote-server/cluster16.png" width="900" align="center">
-  </div>
+  <ul>
+    <font size=6>
+      <pre><code data-trim data-noescape>
+        #!/bin/bash
+        cd ~/project/raw_data
+
+        for f in $(ls *.fastq);
+            do rm ~/project/slurm_logs/${f}.*.out
+
+            sbatch --cpus-per-task=18 --mem=15gb --time=5-24 \
+            -p blade -o ~/project/slurm_logs/${f}.%j.out << EOF
+        <mark>#!/bin/bash</mark>
+        <mark>cd ~/project/raw_data</mark>
+        <mark>bwa mem –T 18 ${f}</mark>
+        EOF
+
+        done
+        exit
+
+      </code></pre>
+    </font>
+  </ul>
 </section>
 
 <section id="slurm17">
   <h1>SLURM: iterating jobs over files</h1>
-  <div>
-      <img src="modules/remote-server/cluster17.png" width="900" align="center">
-  </div>
+  <ul>
+    <font size=6>
+      <pre><code data-trim data-noescape>
+      #!/bin/bash
+      cd ~/project/raw_data
+      for f in $(ls *.fastq);
+         do  rm ~/project/slurm_logs/${f}.*.out
+
+         while [  `squeue –u JBoucas | wc –l` -gt “500” ];
+            do echo “sleeping”; sleep 300
+         done
+
+         sbatch --cpus-per-task=18 --mem=15gb --time=5-24 \
+         -p blade -o ~/project/slurm_logs/${f}.%j.out ~/project/tmp/${f}.sh << EOF
+         <mark>#!/bin/bash</mark>
+         <mark>cd ~/project/raw_data</mark>
+         <mark>bwa mem –T 18 ${f}</mark>
+         EOF
+
+      done
+      exit
+      </code></pre>
+    </font>
+  </ul>
 </section>
 
 <section id="slurm18">
   <h1>SLURM with shifter</h1>
-  <div>
-      <img src="modules/remote-server/cluster18.png" width="900" align="center">
-  </div>
+  <ul>
+    <font size=6>
+      <pre><code data-trim data-noescape>
+      #!/bin/bash
+      cd ~/project/raw_data
+      for f in $(ls *.fastq);
+         do  rm ~/project/slurm_logs/${f}.*.out
+
+         sbatch --cpus-per-task=18 --mem=15gb --time=5-24 \
+         -p blade -o ~/project/slurm_logs/${f}.%j.out ~/project/tmp/${f}.sh << EOF
+      #!/bin/bash
+      module load shifter/latest
+      shifter --image=hub.age.mpg.de/bioinformatics/software:v1.1.5 << SHI
+      <mark>#!/bin/bash</mark>
+      <mark>source ~/.bashrc</mark>
+      <mark>module load bwa</mark>
+      <mark>cd ~/project/raw_data</mark>
+      <mark>bwa mem –T 18 ${f}</mark>
+      SHI
+      EOF
+
+      done
+      exit
+      </code></pre>
+    </font>
+  </ul>
 </section>
 
 <section id="slurm19">

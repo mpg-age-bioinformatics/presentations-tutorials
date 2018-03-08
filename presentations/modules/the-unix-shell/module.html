@@ -214,7 +214,7 @@
   <font size=6>
     <ul>
       When we started we first did something like go to the folder of our username.
-      Then we opened 'tutorial-shell-genomics' then 'data'.
+      Then we opened 'shell-genomics-edamame' then 'edamame-data'.
     </ul>
     <div>
         <img src="modules/the-unix-shell/file_structure.png" align="center">
@@ -344,7 +344,7 @@
       This is the full path approach.
       <pre><code data-trim>
         cd
-        cd edamame-data/shell/hidden
+        cd shell-genomics-edamame/edamame-data/shell/hidden
       </code></pre>
       This is the relative path approach.
     </ul>
@@ -357,7 +357,7 @@
     <ul>
       <pre><code data-trim>
         cd
-        ln –s cd /home/&ltusername&gt/shell-genomics-edamame/edamame-data/hidden hid
+        ln –s shell-genomics-edamame/edamame-data/hidden hid
       </code></pre>
       This will create a symbolic link called `hid` which will take you to the folder `/home/&ltusername&gt/shell-genomics-edamame/edamame-data/hidden`.
       <br>Check out the content of your home folder:
@@ -509,7 +509,7 @@
   <ul>
     1. Print out the contents of the `~/shell-genomics-edamame/edamame-data/MiSeq/stability.files` file. What does this file contain?
     <br>
-    <br>2. Without changing directories, (you should still be in `edamame-data`), use one short command to print the contents of all of the files in the `/home/<username>/shell-genomics-edamame/edamame-data/MiSeq` directory.
+    <br>2. Without changing directories, use one short command to print the contents of all of the files in the `/home/&ltusername&gt/shell-genomics-edamame/edamame-data/MiSeq` directory.
   </ul>
 </section>
 
@@ -545,7 +545,7 @@
       </ul>
     </div>
     <ul>
-      `less` also gives you a way of searching through files. Just hit the "/" key to begin a search. Enter the name of the word you would like to search for and hit enter. It will jump to the next location where that word is found. Try searching the `dictionary.txt` file for the word "cat".
+      `less` also gives you a way of searching through files. Just hit the "/" key to begin a search. Enter the name of the word you would like to search for and hit enter. It will jump to the next location where that word is found. Try searching the `README.md` file for the word "cat".
     </ul>
   </font>
 </section>
@@ -559,7 +559,7 @@
       you are at the end of the file and search for the word "cat", `less` will
       not find it. You need to go to the beginning of the file and search.
       <br>
-      <br>For instance, let's search for the sequence `1101:14341` in our file.
+      <br>For instance, let's search for the sequence `1101:14341` in the file `F3D0_S188_L001_R1_001.fastq`.
       <br>
       <br>You can see that we go right to that sequence and can see what it looks like.
       <br>
@@ -576,15 +576,15 @@
       The commands are `head` and `tail` and they just let you look at the
       beginning and end of a file respectively.
       <pre><code data-trim>
-        head F3D0_Shead F3D0_S188_L001_R1_001.fastq
-        tail F3D0_S188_L001_R1_001.fastq188_L001_R1_001.fastq
+        head F3D0_S188_L001_R1_001.fastq
+        tail F3D0_S188_L001_R1_001.fastq
       </code></pre>
       The `-n` option to either of these commands can be used to print the
       first or last `n` lines of a file. To print the first/last line of the
       file use:
       <pre><code data-trim>
-         head –n 1 F3D0_Shead F3D0_S188_L001_R1_001.fastq
-         tail –n 1 F3D0_S188_L001_R1_001.fastq188_L001_R1_001.fastq
+         head -n 1 F3D0_S188_L001_R1_001.fastq
+         tail -n 1 F3D0_S188_L001_R1_001.fastq
       </code></pre>
     </ul>
   </font>
@@ -659,7 +659,7 @@
       That tells us the number of lines, words and characters in the file.
       If we just want the number of lines, we can use the `-l` flag for `lines`.
       <pre><code data-trim>
-        grep TTATCCGGATTTATTGGGTTTAAAGGGT * | wc –l
+        grep TTATCCGGATTTATTGGGTTTAAAGGGT * | wc -l
       </code></pre>
     </ul>
   </font>
@@ -681,7 +681,7 @@
       <pre><code data-trim>
        mv stability.files_backup backup/
       </code></pre>
-      This moves `stability.files_backup` into the directory `backup/` or the full path would be `~/edamame-data/shell/MiSeq/backup`
+      This moves `stability.files_backup` into the directory `backup/` or the full path would be `~/shell-genomics-edamame/edamame-data/MiSeq/backup`
     </ul>
   </font>
 </section>
@@ -699,9 +699,9 @@
       <pre><code data-trim>
         rm backup/stability.files_backup
       </code></pre>
-      By default, `rm`, will NOT delete directories. You can tell `rm` to delete a directory using the `-r` option. Let's delete that `new` directory we just made. Enter the following command:
+      By default, `rm`, will NOT delete directories. You can tell `rm` to delete a directory using the `-r` option. Let's delete that `backup` directory we just made. Enter the following command:
       <pre><code data-trim>
-        rm -r new
+        rm -r backup
       </code></pre>
     </ul>
   </font>
@@ -876,7 +876,7 @@
         while read line ;
             do
             echo ${line}
-        done < file.txt
+        done < stability.batch
       </code></pre>
     </ul>
   </font>
@@ -888,20 +888,20 @@
     <ul>
       Syntax:
       <pre><code data-trim>
-        if [ &ltcondition TRUE&gt ] ;
+        if [ &ltcondition TRUE&gt ]
             then
               &ltsomething&gt
-            else;
+            else
             &ltsomething else&gt
             fi
       </code></pre>
       Example:
       <pre><code data-trim>
         J=Jorge
-        if [ ${J} == "Jorge" ] ;
+        if [ ${J} == "Jorge" ]
             then
             echo ${J}
-        else;
+        else
             echo "This is not Jorge"
         fi
       </code></pre>
