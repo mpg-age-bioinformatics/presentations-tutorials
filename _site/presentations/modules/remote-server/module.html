@@ -529,7 +529,8 @@ proc ModulesHelp { } {
            cd ~/
            wget https://raw.githubusercontent.com/mpg-age-bioinformatics/\
            draco_pipelines/master/software/newmod.sh
-           sed 's/\/u\/jboucas\/modules/~\/my_software/g' newmod.sh > t.sh1
+           pwd
+           sed 's/\/u\/jboucas\/modules/\/<path\/to\/home\/folder>\/my_software/g' newmod.sh > t.sh1
            mv t.sh1 newmod.sh
            chmod +x newmod.sh
         </code></pre>
